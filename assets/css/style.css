@@ -1,0 +1,39 @@
+.apresentacao{
+    background-color: black;
+    height: 230px;
+}
+
+.jc-logo{
+    background-color: aquamarine;
+    height: 180px;
+    width: 220px;
+    border-radius: 10px;
+    transform: translate(19px, 42px);
+}
+
+.opcao{
+    height: 86px;
+    width: 200px;
+}
+
+.foto-produto{
+    background-color: aqua;
+    height: 130px;
+    width: 170px;
+    border-radius: 10px;
+}
+
+.card-produto{
+    width: 620px;
+    border-bottom: solid 1px #c8c9ca;
+    padding-bottom: 10px;
+}
+.acao{
+    margin-top: 31px;
+}
+
+.adicionar{
+    border:none;
+    border-radius: 3px;
+    background-color: yellow;
+}
