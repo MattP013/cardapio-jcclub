@@ -1,22 +1,43 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+
+:root{
+    --color-base:#D7986C;
+    --color-secundario:#EDD1B5;
+}
+
 body{
     height: 100vh;
-    background: #E9E9E9;
+    font-family: 'Lato', sans-serif;;
 }
 .apresentacao{
     height: 230px;
-    background-color: black;
+    background:url('../img/fundocoffe.jpg');
+}
+
+.jc-logo{
+
+    transform: translate(19px, 42px);
 }
 
 .jc-logo img{
-    height: 180px;
-    width: 200%;
+    height: 129px;
+    width: 165px;
+    object-fit: cover;
     border-radius: 10px;
-    transform: translate(19px, 42px);
 }
 
 .opcao{
     height: 86px;
     width: 200px;
+    background: transparent;
+    border-color: var(--color-base);
+    color: var(--color-base);
+}
+.opcao:hover{
+    color: var(--color-secundario);
+    background-color: var(--color-base);
 }
 
 .foto-produto{
@@ -29,39 +50,52 @@ body{
 .card-produto{
     flex: 1 1 550px;
     padding: 10px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-
+    border-bottom: solid 1px #D7986C;
+    /* box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px; */
 }
+
+#linha-vertical {
+    height: 87%;
+    border-left: 1px solid var(--color-base);
+    position: absolute;
+}
+
 .card-produto .nome-produto{
-    font-weight: 500;
+    font-weight: 700;
     font-size: 20px;
+    color: #6d6d6d;
 }
 .acao{
     margin-top: 26px;
+    flex: 1;
 }
 
 .adicionar{
     border:none;
     border-radius: 3px;
-    background-color: #cbb551;
+    background-color: var(--color-base);
     color: #FFF;
-    font-weight: 500;
+    font-weight: bold;
     text-align: center;
+    padding: 5px 10px 5px 10px;
 }
 .preco{
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 600;
+    color: var(--color-base);
+
 }
-.cardapio{
-    color: #45494b;
-}
+
 .cardapio h1{
-    font-weight: 300;
+    font-weight: bold;
+    color: var(--color-base);
 }
 
 .wrapper{
-    padding: 20px 14px 20px 14px;
+    position: relative;
+    padding: 24px 14px 24px 14px;
     background-color: #FAFAFA;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    box-shadow: rgb(17 17 26 / 5%) 0px 1px 0px, rgb(17 17 26 / 10%) 0px 0px 8px;
 }
