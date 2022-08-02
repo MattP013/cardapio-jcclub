@@ -17,7 +17,6 @@ body{
 }
 
 .jc-logo{
-
     transform: translate(19px, 42px);
 }
 
@@ -40,11 +39,12 @@ body{
     background-color: var(--color-base);
 }
 
-.foto-produto{
-    background-color: aqua;
-    height: 130px;
+
+.foto-produto img{
+    height: 100%;
     width: 170px;
     border-radius: 10px;
+    object-fit: cover;
 }
 
 .card-produto{
@@ -53,7 +53,9 @@ body{
     border-bottom: solid 1px #D7986C;
     /* box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px; */
 }
-
+.carrinho{
+    background-color:var(--color-base);
+}
 #linha-vertical {
     height: 87%;
     border-left: 1px solid var(--color-base);
@@ -65,10 +67,8 @@ body{
     font-size: 20px;
     color: #6d6d6d;
 }
-.acao{
-    margin-top: 26px;
-    flex: 1;
-}
+
+
 
 .adicionar{
     border:none;
@@ -89,6 +89,7 @@ body{
 .cardapio h1{
     font-weight: bold;
     color: var(--color-base);
+    padding-left: 14px;
 }
 
 .wrapper{
@@ -98,4 +99,24 @@ body{
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     box-shadow: rgb(17 17 26 / 5%) 0px 1px 0px, rgb(17 17 26 / 10%) 0px 0px 8px;
+}
+
+@media screen and (max-width:414px) {
+    .descricao-produto{
+        margin-bottom: 0;
+        font-size: x-small;
+    }
+    .preco{
+        font-size: 16px;
+    }
+    .card-produto .nome-produto{
+        font-size: 16px;
+    }
+
+    .foto-produto img{
+        width: 112px;
+    }
+    .categoria {
+        justify-content: space-between;
+    }
 }
