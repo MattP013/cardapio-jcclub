@@ -64,52 +64,74 @@ function carregarCardapio (cardapio){
     })
     containerCardapio.html(result);
 }
+function lerStorage(){
+    return localStorage.produto ? JSON.parse(localStorage.produto) : [];
+}
 
-function AddCarrinho(id_item){
-    const {cid} = id_item
-    const retorno = Cardapio.map((c)=>{
-        
-        if (c.id == cid) {
+function salvarStorage(id_item){
+    const {cid} = id_item;
+    const validar = lerStorage();
+    if(validar.lenght >= 0)
+    {
+        const produto = validar.filter((p)=> p.id == cid ? null : p)
 
-            return  `
-                <div class="card-produto d-flex" style="flex: 0">
-                    <div class="foto-produto">
-                        <img src="./assets/img/${c.img}" alt="">
-                    </div>
-                    <div class="ps-2 w-100">
-                        <h6 class="nome-produto">
-                        ${c.nome}
-                        </h6>
+        if (produto != null) {
+            const salvar = [...lerStorage(), produto]
+            localStorage.setItem('produto', JSON.stringify(salvar)) 
+            carregarStorage();
+        }
+    }
+    else
+    {
+        const produto = Cardapio.filter((c) => c.id == cid)
+        const salvar = [...lerStorage(), produto]
+         localStorage.setItem('produto', JSON.stringify(salvar)) 
+         carregarStorage();
 
-                        <p class="descricao-produto">
-                            ${c.descricao}
-                        </p>
+    }
+}
 
-                        <div class="acao d-flex justify-content-between align-items-end">
-                            <span class="preco">R$ ${c.preco}</span>
-                            <button data-cid="${c.id}" class="adicionar">
-                                +
-                            </button>
-                        </div>
+function carregarStorage(){
+    console.log(lerStorage());
+    const retorno = lerStorage().map((c) => {
+        return  `
+            <div class="card-produto d-flex" style="flex: 0">
+                <div class="foto-produto">
+                    <img src="./assets/img/${c.img}" alt="">
+                </div>
+                <div class="ps-2 w-100">
+                    <h6 class="nome-produto">
+                    ${c.nome}
+                    </h6>
+
+                    <p class="descricao-produto">
+                        ${c.descricao}
+                    </p>
+
+                    <div class="acao d-flex justify-content-between align-items-end">
+                        <span class="preco">R$ ${c.preco}</span>
+                        <button data-cid="${c.id}" class="adicionar">
+                            +
+                        </button>
                     </div>
                 </div>
-             `  
-        }
-        else{
-            console.log('n ta encontrando');
-        }
-    })
-
+            </div>
+        ` 
+    });
     containerCarrinho.html(retorno);
+}
+
+function Carrinho(){
 }
 
 
 
 $(document).ready(function(){
+    localStorage.clear()
     carregarCardapio(Cardapio);
 
     $('.adicionar').click(function(){
-        AddCarrinho($(this).data());
-        console.log($(this).data());
+        salvarStorage($(this).data());
     })
 })
+
