@@ -70,47 +70,50 @@ function lerStorage(){
 
 function salvarStorage(id_item){
     const {cid} = id_item;
-    const validar = lerStorage();
-    if(validar.lenght >= 0)
+    const contentCart = lerStorage();
+    if(contentCart.lenght > 0)
     {
-        const produto = validar.filter((p)=> p.id == cid ? null : p)
+        const produto = contentCart.filter((p)=> p.id == cid ? true : false)
 
-        if (produto != null) {
+        if (!produto) {
+
+            console.log(produto);
             const salvar = [...lerStorage(), produto]
             localStorage.setItem('produto', JSON.stringify(salvar)) 
-            carregarStorage();
+            carregarStorage(lerStorage());
         }
+        
     }
     else
     {
         const produto = Cardapio.filter((c) => c.id == cid)
         const salvar = [...lerStorage(), produto]
          localStorage.setItem('produto', JSON.stringify(salvar)) 
-         carregarStorage();
+         carregarStorage(lerStorage());
 
     }
 }
 
-function carregarStorage(){
-    console.log(lerStorage());
-    const retorno = lerStorage().map((c) => {
+function carregarStorage(Cproduto){
+    const retorno = Cproduto.map((c,i) => {
+        // console.log(c[i].img);
         return  `
             <div class="card-produto d-flex" style="flex: 0">
                 <div class="foto-produto">
-                    <img src="./assets/img/${c.img}" alt="">
+                    <img src="./assets/img/${c[i].img}" alt="">
                 </div>
                 <div class="ps-2 w-100">
                     <h6 class="nome-produto">
-                    ${c.nome}
+                        ${c[i].nome}
                     </h6>
 
                     <p class="descricao-produto">
-                        ${c.descricao}
+                        ${c[i].descricao}
                     </p>
 
                     <div class="acao d-flex justify-content-between align-items-end">
-                        <span class="preco">R$ ${c.preco}</span>
-                        <button data-cid="${c.id}" class="adicionar">
+                        <span class="preco">R$ ${c[i].preco}</span>
+                        <button data-cid="${c[i].id}" class="adicionar">
                             +
                         </button>
                     </div>
@@ -118,6 +121,7 @@ function carregarStorage(){
             </div>
         ` 
     });
+    // console.log(retorno);
     containerCarrinho.html(retorno);
 }
 
