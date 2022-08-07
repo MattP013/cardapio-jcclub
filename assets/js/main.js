@@ -33,6 +33,9 @@ const Cardapio = [
     }
 ]
 
+
+
+
 const containerCardapio = $('.wrapper'); 
 const containerCarrinho = $('.container-carrinho')
 function carregarCardapio (cardapio){
@@ -64,70 +67,124 @@ function carregarCardapio (cardapio){
     })
     containerCardapio.html(result);
 }
+
+
+
+
 function lerStorage(){
     return localStorage.produto ? JSON.parse(localStorage.produto) : [];
 }
 
 function salvarStorage(id_item){
-    const {cid} = id_item;
+    const cid = id_item;
     const contentCart = lerStorage();
+
     if(contentCart.lenght > 0)
     {
-        const produto = contentCart.filter((p)=> p.id == cid ? true : false)
+        const adicionado = contentCart.filter((produto) => produto.id == cid ? produto : null)
+        if (adicionado == null) {
+            
+            const produto = Cardapio.filter((c) => c.id == cid)
 
-        if (!produto) {
+            produto[0].qtd = 1
+            produto[0].novopreco =  0
 
-            console.log(produto);
             const salvar = [...lerStorage(), produto]
+            
             localStorage.setItem('produto', JSON.stringify(salvar)) 
             carregarStorage(lerStorage());
         }
+        else{
+            
+            console.log('produto  adicionado');
+
+        }
+
         
     }
     else
     {
         const produto = Cardapio.filter((c) => c.id == cid)
+        produto[0].qtd = 1
+        produto[0].novopreco =  0
         const salvar = [...lerStorage(), produto]
-         localStorage.setItem('produto', JSON.stringify(salvar)) 
-         carregarStorage(lerStorage());
+        localStorage.setItem('produto', JSON.stringify(salvar)) 
+        carregarStorage(lerStorage());
 
     }
 }
 
 function carregarStorage(Cproduto){
-    const retorno = Cproduto.map((c,i) => {
-        // console.log(c[i].img);
-        return  `
-            <div class="card-produto d-flex" style="flex: 0">
+        console.log(Cproduto);
+        let retorno = []
+        retorno = Cproduto.map((c,i)=>{
+           return `
+                <div class="card-produto d-flex" style="flex: 0">
                 <div class="foto-produto">
-                    <img src="./assets/img/${c[i].img}" alt="">
+                    <img src="./assets/img/${c[0].img}" alt="">
                 </div>
-                <div class="ps-2 w-100">
+                <div class="ms-2 w-100">
                     <h6 class="nome-produto">
-                        ${c[i].nome}
+                        ${c[0].nome}
                     </h6>
-
                     <p class="descricao-produto">
-                        ${c[i].descricao}
+                        ${c[0].descricao}
                     </p>
-
-                    <div class="acao d-flex justify-content-between align-items-end">
-                        <span class="preco">R$ ${c[i].preco}</span>
-                        <button data-cid="${c[i].id}" class="adicionar">
+                    <div data-cid="${c[0].id}" class="operacao mt-2 d-flex justify-content-md-start gap-md-3 gap-0 justify-content-between">
+                        <button class="menos" disabled="true">
+                            -
+                        </button>
+                            <span class="preco align-self-center">
+                                x${c[0].qtd} - R$ ${carregarPreco(c[0].preco, c[0].qtd)}
+                            </span>
+                        <button onclick="alterarPreco(${c[0].id},${c[0].qtd})" class="mais" >
                             +
                         </button>
                     </div>
                 </div>
-            </div>
-        ` 
-    });
-    // console.log(retorno);
-    containerCarrinho.html(retorno);
+                </div> 
+           `
+       }).join('')
+
+    containerCarrinho.html(retorno)
 }
 
-function Carrinho(){
+
+
+function carregarPreco(preco, qtd){
+
+    const NewPreco = preco.replace(',','.')
+
+     return Intl.NumberFormat('pt-br',{minimumFractionDigits: 2}).format( NewPreco * qtd)
 }
 
+function alterarPreco(idProdutoCar, QtdCart){
+
+    // const Produto = $(`.operacao[data-cid=${idProdutoCar}]`)
+    // const Qtd = Produto.children('.preco').attr('data-quantidade')
+
+    // const PrecoAtual = Produto.children('.preco').text().replace("R$", "")
+    let index;
+    const NewPreco = lerStorage().filter((produto , i)=>{
+        
+        if(produto[0].id == idProdutoCar)
+        {
+            index = i;
+            produto[0].qtd++;
+            return produto
+        }
+    })
+
+    console.log(NewPreco);
+
+    // NewPreco.push({
+    //     id:idProdutoCar,
+    //     qtd: QtdCart++
+    // })
+
+    // localStorage.setItem("produto",JSON.stringify(NewPreco))
+    // carregarStorage(lerStorage())
+}   
 
 
 $(document).ready(function(){
@@ -135,7 +192,7 @@ $(document).ready(function(){
     carregarCardapio(Cardapio);
 
     $('.adicionar').click(function(){
-        salvarStorage($(this).data());
-    })
+        salvarStorage($(this).attr('data-cid'));
+    }) 
 })
 

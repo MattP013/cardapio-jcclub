@@ -79,6 +79,24 @@ body{
     text-align: center;
     padding: 5px 10px 5px 10px;
 }
+.mais{
+    border:none;
+    border-radius: 3px;
+    background-color: var(--color-base);
+    color: #FFF;
+    font-weight: bold;
+    text-align: center;
+    padding: 5px 10px 5px 10px;
+}
+.menos{
+    border:none;
+    border-radius: 3px;
+    background-color: var(--color-secundario);
+    color: #FFF;
+    font-weight: bold;
+    text-align: center;
+    padding: 5px 10px 5px 10px;
+}
 .preco{
     font-size: 18px;
     font-weight: 600;
