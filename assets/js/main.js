@@ -5,7 +5,9 @@ const Cardapio = [
         categoria:'Bebida Quentes',
         preco: Intl.NumberFormat('pt-br',{minimumFractionDigits: 2}).format(14.00),
         descricao:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
-        img:'logo-jc.jpg'
+        img:'logo-jc.jpg',
+        qtd:1,
+        novopreco:0
     },
     {
         id:2,
@@ -13,7 +15,9 @@ const Cardapio = [
         categoria:'Bebida Quentes',
         preco: Intl.NumberFormat('pt-br',{minimumFractionDigits: 2}).format(28.90),
         descricao:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
-        img:'logo-jc.jpg'
+        img:'logo-jc.jpg',
+        qtd:1,
+        novopreco:0
     },
     {
         id:3,
@@ -21,7 +25,9 @@ const Cardapio = [
         categoria:'Bebida Quentes',
         preco:Intl.NumberFormat('pt-br',{minimumFractionDigits: 2}).format(14.00),
         descricao:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
-        img:'logo-jc.jpg'
+        img:'logo-jc.jpg',
+        qtd:1,
+        novopreco:0
     },
     {
         id:4,
@@ -29,7 +35,9 @@ const Cardapio = [
         categoria:'Bebida Quentes',
         preco:Intl.NumberFormat('pt-br',{minimumFractionDigits: 2}).format(14.00),
         descricao:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
-        img:'logo-jc.jpg'
+        img:'logo-jc.jpg',
+        qtd:1,
+        novopreco:0
     }
 ]
 
@@ -79,45 +87,52 @@ function salvarStorage(id_item){
     const cid = id_item;
     const contentCart = lerStorage();
 
-    if(contentCart.lenght > 0)
-    {
-        const adicionado = contentCart.filter((produto) => produto.id == cid ? produto : null)
-        if (adicionado == null) {
+        if (localStorage.produto) {
+            let index;
+             const produto = contentCart.filter((produtoCart, i) =>{ 
+                if( produtoCart[0].id == cid){
+                    index = i;
+                    return produtoCart[0]
+                    
+                }
             
-            const produto = Cardapio.filter((c) => c.id == cid)
-
-            produto[0].qtd = 1
-            produto[0].novopreco =  0
-
-            const salvar = [...lerStorage(), produto]
+            })
+            if(produto[0])
+            {
+                maisUnidade(index)
+            }
+            else
+            {
+                const produto = Cardapio.filter((c) => c.id == cid)
+    
+                contentCart.push({...produto})
+                localStorage.setItem('produto', JSON.stringify(contentCart)) 
+                carregarStorage(lerStorage());
+            }
             
-            localStorage.setItem('produto', JSON.stringify(salvar)) 
-            carregarStorage(lerStorage());
+            
         }
         else{
-            
-            console.log('produto  adicionado');
-
+          const produto = Cardapio.filter((c) => c.id == cid)
+        
+          contentCart.push({...produto})
+          localStorage.setItem('produto', JSON.stringify(contentCart)) 
+          carregarStorage(lerStorage());
         }
 
         
-    }
-    else
-    {
-        const produto = Cardapio.filter((c) => c.id == cid)
-        produto[0].qtd = 1
-        produto[0].novopreco =  0
-        const salvar = [...lerStorage(), produto]
-        localStorage.setItem('produto', JSON.stringify(salvar)) 
-        carregarStorage(lerStorage());
+ 
+        // const produto = Cardapio.filter((c) => c.id == cid)
 
-    }
+        // contentCart.push({...produto})
+        // localStorage.setItem('produto', JSON.stringify(contentCart)) 
+        // carregarStorage(lerStorage());
+    
 }
 
 function carregarStorage(Cproduto){
-        console.log(Cproduto);
-        let retorno = []
-        retorno = Cproduto.map((c,i)=>{
+    
+        const retorno = Cproduto.map((c,i)=>{
            return `
                 <div class="card-produto d-flex" style="flex: 0">
                 <div class="foto-produto">
@@ -131,20 +146,20 @@ function carregarStorage(Cproduto){
                         ${c[0].descricao}
                     </p>
                     <div data-cid="${c[0].id}" class="operacao mt-2 d-flex justify-content-md-start gap-md-3 gap-0 justify-content-between">
-                        <button class="menos" disabled="true">
+                        <button class="menos" disabled="disabled">
                             -
                         </button>
                             <span class="preco align-self-center">
                                 x${c[0].qtd} - R$ ${carregarPreco(c[0].preco, c[0].qtd)}
                             </span>
-                        <button onclick="alterarPreco(${c[0].id},${c[0].qtd})" class="mais" >
+                        <button onclick="maisUnidade(${i})" class="mais" >
                             +
                         </button>
                     </div>
                 </div>
                 </div> 
            `
-       }).join('')
+       })
 
     containerCarrinho.html(retorno)
 }
@@ -152,40 +167,36 @@ function carregarStorage(Cproduto){
 
 
 function carregarPreco(preco, qtd){
-
     const NewPreco = preco.replace(',','.')
 
      return Intl.NumberFormat('pt-br',{minimumFractionDigits: 2}).format( NewPreco * qtd)
 }
 
-function alterarPreco(idProdutoCar, QtdCart){
+function maisUnidade( index){
 
-    // const Produto = $(`.operacao[data-cid=${idProdutoCar}]`)
+    
     // const Qtd = Produto.children('.preco').attr('data-quantidade')
+    let Produto = lerStorage()
+    let NewPreco = Produto[index]
+    let chave = NewPreco[0].id;
+    console.log(chave);
+    let ativarButton = $(`.operacao[data-cid=${chave}]`).children('.menos')
+    ativarButton.attr('disabled')
+    console.log(ativarButton);
+    // $(this).find(':button[type=submit]').prop('disabled', true);
 
-    // const PrecoAtual = Produto.children('.preco').text().replace("R$", "")
-    let index;
-    const NewPreco = lerStorage().filter((produto , i)=>{
-        
-        if(produto[0].id == idProdutoCar)
-        {
-            index = i;
-            produto[0].qtd++;
-            return produto
-        }
-    })
+    NewPreco[0].qtd+= 1
+    Produto[index] = NewPreco
 
-    console.log(NewPreco);
 
-    // NewPreco.push({
-    //     id:idProdutoCar,
-    //     qtd: QtdCart++
-    // })
-
-    // localStorage.setItem("produto",JSON.stringify(NewPreco))
-    // carregarStorage(lerStorage())
+    localStorage.setItem('produto', JSON.stringify(Produto))
+    carregarStorage(lerStorage())
 }   
 
+function menosUnidade(index)
+{
+
+}
 
 $(document).ready(function(){
     localStorage.clear()
