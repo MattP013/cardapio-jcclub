@@ -1,54 +1,56 @@
+
+(function () { })
 const Cardapio = [
     {
-        id:1,
-        nome:'Café Expresso',
-        categoria:'Bebida Quentes',
-        preco: Intl.NumberFormat('pt-br',{minimumFractionDigits: 2}).format(14.00),
-        descricao:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
-        img:'logo-jc.jpg',
-        qtd:1,
-        novopreco:0
+        id: 1,
+        nome: 'Café Expresso',
+        categoria: 'Bebida Quentes',
+        preco: Intl.NumberFormat('pt-br', { minimumFractionDigits: 2 }).format(14.00),
+        descricao: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
+        img: 'logo-jc.jpg',
+        qtd: 1,
+        novopreco: 0
     },
     {
-        id:2,
-        nome:'Capuccino',
-        categoria:'Bebida Quentes',
-        preco: Intl.NumberFormat('pt-br',{minimumFractionDigits: 2}).format(28.90),
-        descricao:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
-        img:'logo-jc.jpg',
-        qtd:1,
-        novopreco:0
+        id: 2,
+        nome: 'Capuccino',
+        categoria: 'Bebida Quentes',
+        preco: Intl.NumberFormat('pt-br', { minimumFractionDigits: 2 }).format(28.90),
+        descricao: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
+        img: 'logo-jc.jpg',
+        qtd: 1,
+        novopreco: 0
     },
     {
-        id:3,
-        nome:'Café Americano',
-        categoria:'Bebida Quentes',
-        preco:Intl.NumberFormat('pt-br',{minimumFractionDigits: 2}).format(14.00),
-        descricao:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
-        img:'logo-jc.jpg',
-        qtd:1,
-        novopreco:0
+        id: 3,
+        nome: 'Café Americano',
+        categoria: 'Bebida Quentes',
+        preco: Intl.NumberFormat('pt-br', { minimumFractionDigits: 2 }).format(14.00),
+        descricao: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
+        img: 'logo-jc.jpg',
+        qtd: 1,
+        novopreco: 0
     },
     {
-        id:4,
-        nome:'Café com Leite',
-        categoria:'Bebida Quentes',
-        preco:Intl.NumberFormat('pt-br',{minimumFractionDigits: 2}).format(14.00),
-        descricao:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
-        img:'logo-jc.jpg',
-        qtd:1,
-        novopreco:0
+        id: 4,
+        nome: 'Café com Leite',
+        categoria: 'Bebida Quentes',
+        preco: Intl.NumberFormat('pt-br', { minimumFractionDigits: 2 }).format(14.00),
+        descricao: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
+        img: 'logo-jc.jpg',
+        qtd: 1,
+        novopreco: 0
     }
 ]
 
 
 
-
-const containerCardapio = $('.wrapper'); 
+const containerCardapio = $('.wrapper');
 const containerCarrinho = $('.container-carrinho')
-function carregarCardapio (cardapio){
-    const result = cardapio.map((c)=>{
-        return  `
+
+function carregarCardapio(cardapio) {
+    const result = cardapio.map((c) => {
+        return `
             <div class="card-produto d-flex">
                 <div class="foto-produto">
                     <img src="./assets/img/${c.img}" alt="">
@@ -70,70 +72,59 @@ function carregarCardapio (cardapio){
                     </div>
                 </div>
             </div>
-        `  
-               
+        `
+
     })
     containerCardapio.html(result);
 }
 
 
 
-
-function lerStorage(){
+function lerStorage() {
     return localStorage.produto ? JSON.parse(localStorage.produto) : [];
 }
 
-function salvarStorage(id_item){
+function salvarStorage(id_item) {
     const cid = id_item;
     const contentCart = lerStorage();
 
-        if (localStorage.produto) {
-            let index;
-             const produto = contentCart.filter((produtoCart, i) =>{ 
-                if( produtoCart[0].id == cid){
-                    index = i;
-                    return produtoCart[0]
-                    
-                }
-            
-            })
-            if(produto[0])
-            {
-                maisUnidade(index)
+    if (localStorage.produto) {
+        let index;
+        const produto = contentCart.filter((produtoCart, i) => {
+            if (produtoCart[0].id == cid) {
+                index = i;
+                return produtoCart[0]
+
             }
-            else
-            {
-                const produto = Cardapio.filter((c) => c.id == cid)
-    
-                contentCart.push({...produto})
-                localStorage.setItem('produto', JSON.stringify(contentCart)) 
-                carregarStorage(lerStorage());
-            }
-            
-            
+
+        })
+        if (produto[0]) {
+            maisUnidade(index)
         }
-        else{
-          const produto = Cardapio.filter((c) => c.id == cid)
-        
-          contentCart.push({...produto})
-          localStorage.setItem('produto', JSON.stringify(contentCart)) 
-          carregarStorage(lerStorage());
+        else {
+            const produto = Cardapio.filter((c) => c.id == cid)
+
+            contentCart.push({ ...produto })
+            localStorage.setItem('produto', JSON.stringify(contentCart))
+            carregarStorage(lerStorage());
         }
 
-        
- 
-        // const produto = Cardapio.filter((c) => c.id == cid)
 
-        // contentCart.push({...produto})
-        // localStorage.setItem('produto', JSON.stringify(contentCart)) 
-        // carregarStorage(lerStorage());
-    
+    }
+    else {
+        const produto = Cardapio.filter((c) => c.id == cid)
+
+        contentCart.push({ ...produto })
+        localStorage.setItem('produto', JSON.stringify(contentCart))
+        carregarStorage(lerStorage());
+    }
+
 }
 
-function carregarStorage(Cproduto){
-    
-        const retorno = Cproduto.map((c,i)=>{
-           return `
+function carregarStorage(Cproduto) {
+    let botaoDiminuir = (quantidade, index) => { return quantidade > 1 ? `<button class="menos" onclick="menosUnidade(${index})" style="background-color: #D7986C">-</button>` : '<button class="menos" disabled="disabled">-</button>' }
+    const retorno = Cproduto.map((c, index) => {
+        return `
                 <div class="card-produto d-flex" style="flex: 0">
                 <div class="foto-produto">
                     <img src="./assets/img/${c[0].img}" alt="">
@@ -146,64 +137,64 @@ function carregarStorage(Cproduto){
                         ${c[0].descricao}
                     </p>
                     <div data-cid="${c[0].id}" class="operacao mt-2 d-flex justify-content-md-start gap-md-3 gap-0 justify-content-between">
-                        <button class="menos" disabled="disabled">
-                            -
-                        </button>
+                            ${botaoDiminuir(c[0].qtd, index)}
                             <span class="preco align-self-center">
                                 x${c[0].qtd} - R$ ${carregarPreco(c[0].preco, c[0].qtd)}
                             </span>
-                        <button onclick="maisUnidade(${i})" class="mais" >
+                        <button class="mais" onclick="maisUnidade(${index})" >
                             +
                         </button>
                     </div>
                 </div>
                 </div> 
            `
-       })
+    })
 
     containerCarrinho.html(retorno)
 }
 
 
 
-function carregarPreco(preco, qtd){
-    const NewPreco = preco.replace(',','.')
+function carregarPreco(preco, qtd) {
+    const NewPreco = preco.replace(',', '.')
 
-     return Intl.NumberFormat('pt-br',{minimumFractionDigits: 2}).format( NewPreco * qtd)
+    return Intl.NumberFormat('pt-br', { minimumFractionDigits: 2 }).format(NewPreco * qtd)
 }
 
-function maisUnidade( index){
+function maisUnidade(index) {
 
-    
-    // const Qtd = Produto.children('.preco').attr('data-quantidade')
     let Produto = lerStorage()
     let NewPreco = Produto[index]
-    let chave = NewPreco[0].id;
-    console.log(chave);
-    let ativarButton = $(`.operacao[data-cid=${chave}]`).children('.menos')
-    ativarButton.attr('disabled')
-    console.log(ativarButton);
-    // $(this).find(':button[type=submit]').prop('disabled', true);
 
-    NewPreco[0].qtd+= 1
+    NewPreco[0].qtd += 1
     Produto[index] = NewPreco
-
 
     localStorage.setItem('produto', JSON.stringify(Produto))
     carregarStorage(lerStorage())
-}   
-
-function menosUnidade(index)
-{
-
 }
 
-$(document).ready(function(){
+
+
+function menosUnidade(index) {
+    let Produto = lerStorage()
+    let NewPreco = Produto[index]
+
+    NewPreco[0].qtd -= 1
+    Produto[index] = NewPreco
+
+    localStorage.setItem('produto', JSON.stringify(Produto))
+    carregarStorage(lerStorage())
+}
+
+$(document).ready(function () {
+
     localStorage.clear()
     carregarCardapio(Cardapio);
 
-    $('.adicionar').click(function(){
+    $('.adicionar').click(function () {
         salvarStorage($(this).attr('data-cid'));
-    }) 
+    })
 })
+
+
 
