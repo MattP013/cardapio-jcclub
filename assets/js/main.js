@@ -120,10 +120,22 @@ function salvarStorage(id_item) {
     }
 
 }
-
+function ContadorProdutos(quantidade)
+{
+    if(quantidade){
+        $('.contador').removeClass('d-none').text(quantidade)
+    }
+    else
+    {
+        $('.contador').addClass('d-none')
+    }
+}
 function carregarStorage(Cproduto) {
+    let contarprodutos = 0;
     let botaoDiminuir = (quantidade, index) => { return quantidade > 1 ? `<button class="menos" onclick="menosUnidade(${index})" style="background-color: #D7986C">-</button>` : '<button class="menos" disabled="disabled">-</button>' }
+
     const retorno = Cproduto.map((c, index) => {
+        contarprodutos+=c[0].qtd
         return `
                 <div class="card-produto d-flex" style="flex: 0">
                 <div class="foto-produto">
@@ -131,7 +143,7 @@ function carregarStorage(Cproduto) {
                 </div>
                 <div class="ms-2 w-100">
                     <h6 class="nome-produto">
-                        ${c[0].nome}
+                        ${c[0].nome} <span class="excluir" onclick="excluirProduto(${index})">X</span>
                     </h6>
                     <p class="descricao-produto">
                         ${c[0].descricao}
@@ -149,16 +161,35 @@ function carregarStorage(Cproduto) {
                 </div> 
            `
     })
-
-    containerCarrinho.html(retorno)
+    if(retorno[0] != undefined)
+    {
+        ContadorProdutos(contarprodutos)
+        containerCarrinho.html(retorno)
+        atualizarPrecoTotal()
+    }
+    else
+    {
+        ContadorProdutos(0)
+        containerCarrinho.html(` <p class="text-center" style="font-size: 20px;">Nenhum produto selecionado</p>`)
+    }       
+       
 }
 
-
+function excluirProduto(index){
+    const DeleteProduto = lerStorage();
+    DeleteProduto.splice(index,1);
+    localStorage.setItem('produto', JSON.stringify(DeleteProduto))
+    carregarStorage(DeleteProduto)
+}
 
 function carregarPreco(preco, qtd) {
     const NewPreco = preco.replace(',', '.')
 
     return Intl.NumberFormat('pt-br', { minimumFractionDigits: 2 }).format(NewPreco * qtd)
+}
+
+function atualizarPrecoTotal(){
+    $('.container-total').removeClass('d-none')
 }
 
 function maisUnidade(index) {
