@@ -105,22 +105,9 @@ body::-webkit-scrollbar-thumb{
     letter-spacing: 0.3ch;
     list-style: none;
 }
-/* @media only screen and (min-width:600px) {
-    .navbar{
-        top: 0;
-        width: 5rem;
-        height: 100vh;
-    }
 
-     .navbar:hover{
-        width: 16rem;
-    }
-    .navbar:hover .link-text{
-        display: inline;
-    } 
-} */
-@media screen and (max-width:415px) {
-    .navbar{
+@media screen and (max-width:600px) {
+    .menu-nav{
         bottom: 0;
         width: 100vw;
         height: 5rem;
@@ -139,4 +126,19 @@ body::-webkit-scrollbar-thumb{
     main{
         margin: 0;
     }
+}
+
+@media screen and (min-width:600px) {
+    .menu-nav{
+        top: 0;
+        width: 5rem;
+        height: 100vh;
+    }
+
+     .navbar:hover{
+        width: 16rem;
+    }
+    .navbar:hover .link-text{
+        display: inline;
+    } 
 }
