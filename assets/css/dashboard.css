@@ -68,6 +68,7 @@ body::-webkit-scrollbar-thumb {
   transition: 0.5s ease;
 }
 
+
 .nav-option:hover {
   color: #ccc;
   filter: grayscale(0%) opacity(1);
@@ -149,7 +150,6 @@ body::-webkit-scrollbar-thumb {
   }
 }
 
-<<<<<<< HEAD
 @media screen and (min-width: 600px) {
   .menu-nav {
     top: 0;
@@ -163,56 +163,4 @@ body::-webkit-scrollbar-thumb {
   .navbar:hover .link-text {
     display: inline;
   }
-=======
-.menu-nav:hover .link-text{
-    display: block;
-}
-
-.logo{
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    text-align: center;
-    background: var(--bg-secundary);
-    font-size: 1.5rem;
-    letter-spacing: 0.3ch;
-    list-style: none;
-}
-
-@media screen and (max-width:600px) {
-    .menu-nav{
-        bottom: 0;
-        width: 100vw;
-        height: 5rem;
-    }
-    .logo{
-        display: none;
-    }
-
-    .navbar-nav{
-        flex-direction: row;
-    }
-    .nav-option{
-        justify-content: center;
-    }
-
-    main{
-        margin: 0;
-    }
-}
-
-@media screen and (min-width:600px) {
-    .menu-nav{
-        top: 0;
-        width: 5rem;
-        height: 100vh;
-    }
-
-     .navbar:hover{
-        width: 16rem;
-    }
-    .navbar:hover .link-text{
-        display: inline;
-    } 
->>>>>>> 8cdd3c54b8f25b6393d1025ca1760020035bbaf2
 }
