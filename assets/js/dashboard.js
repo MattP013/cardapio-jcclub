@@ -55,7 +55,6 @@ $(document).ready(function () {
     let inputs = $('.updateProduct').find('input')
     let textarea = $('.updateProduct').find('textarea')
 
-    console.log(inputs);
     $(inputs[1]).val(Produto.nome);
     $(inputs[2]).val(Produto.preco);
     $(inputs[3]).val(Produto.categoria);
@@ -63,6 +62,9 @@ $(document).ready(function () {
    
     $("#product-img").attr("src", `${src}/assets/img/${Produto.img}`);
   }
+   
+
+
 
   $("input[type='file']").on('change', function (){
     if(this.files && this.files[0])
@@ -106,6 +108,10 @@ $(document).ready(function () {
 
   LoadTable(Produtos, Table);
 
+  var option = $('option')
+  var input = [$('#categoria_editar'), $('#categoria_adicionar')]
+  var categorias = [$('#categorias_editar'),$('#categorias_adicionar')]
+
   $(".fa-edit").click(function (e) {
     const produto = $(this).parents("tr").find("th").text();
     ProductById(produto);
@@ -115,31 +121,55 @@ $(document).ready(function () {
     $(this).parents("tr").remove();
   });
 
-  var input = $('input[name="categoria_produto"]');
-  var categorias = $("#categorias");
-  var option = $("option");
 
-  $(input).on("focus", function () {
-    categorias.css("display", "block");
-    input.css("border-radius", "5px 5px 0 0");
+  $(input[0]).on("focus", function () {
+    $(this).next().css("display", "block");
+    $(this).css("border-radius", "5px 5px 0 0");
   });
 
-  $(option).click(function () {
-    input.val($(this).val());
-    categorias.css("display", "none");
-    input.css("border-radius", "5px");
-  });
-
-  $(input).on("input", function () {
-    var text = input.val().toUpperCase();
-    var aux = categorias.find(option).val().toUpperCase().indexOf(text);
-
+  $(input[0]).on("input", function () {
+    var text = $(this).val().toUpperCase();
+    
     for (let element of option) {
       if ($(element).val().toUpperCase().indexOf(text) > -1) {
         $(element).css("display", "block");
       } else {
         $(element).css("display", "none");
       }
+    }
+  });
+
+  $(input[1]).on("focus", function () {
+    $(this).next().css("display", "block");
+    $(this).css("border-radius", "5px 5px 0 0");
+  });
+
+ 
+
+  $(input[1]).on("input", function () {
+    var text = $(this).val().toUpperCase();
+    
+    for (let element of option) {
+      if ($(element).val().toUpperCase().indexOf(text) > -1) {
+        $(element).css("display", "block");
+      } else {
+        $(element).css("display", "none");
+      }
+    }
+  });
+
+  $(option).click(function () {
+    
+    if ($(this).parents('datalist').attr('id') == categorias[0].attr('id')) {
+        input[0].val($(this).val())
+        categorias[0].css("display","none")
+        input[0].css("border-radius", "5px")
+    }
+    else
+    {
+      input[1].val($(this).val())
+      categorias[1].css("display","none")
+      input[1].css("border-radius", "5px")
     }
   });
 });
