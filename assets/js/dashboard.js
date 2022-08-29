@@ -44,6 +44,28 @@ $(document).ready(function () {
       qtd: 1,
       novopreco: 0,
     },
+    {
+      id: 4,
+      nome: "Pão de mel c/ brigadeiro",
+      categoria: "Bebida Quentes",
+      preco: 14.0,
+      descricao:
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
+      img: "logo-jc.jpg",
+      qtd: 1,
+      novopreco: 0,
+    },
+    {
+      id: 4,
+      nome: "Pão de mel c/ ",
+      categoria: "Bebida Quentes",
+      preco: 14.0,
+      descricao:
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
+      img: "logo-jc.jpg",
+      qtd: 1,
+      novopreco: 0,
+    },
   ];
 
   function ProductById(Id) {
@@ -107,6 +129,14 @@ $(document).ready(function () {
   }
 
   LoadTable(Produtos, Table);
+
+
+  $('#search-input').on('input', function (){
+      
+      console.log($(this).val());
+      const tablerow = $('tbody').find('tr')
+      console.log(tablerow);
+  })
 
   var option = $('option')
   var input = [$('#categoria_editar'), $('#categoria_adicionar')]
