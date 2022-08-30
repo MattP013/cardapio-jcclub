@@ -1,5 +1,5 @@
 
-(function () { })
+
 const Cardapio = [
     {
         id: 1,
@@ -40,17 +40,39 @@ const Cardapio = [
         img: 'logo-jc.jpg',
         qtd: 1,
         novopreco: 0
-    }
+    },
+    {
+        id: 5,
+        nome: "Pão de mel c/ brigadeiro",
+        categoria: "Lanches",
+        preco: 14.0,
+        descricao:
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
+        img: "logo-jc.jpg",
+        qtd: 1,
+        novopreco: 0,
+      },
+      {
+        id: 6,
+        nome: "Pão de mel c/ paçoca",
+        categoria: "Lanches",
+        preco: 14.0,
+        descricao:
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
+        img: "logo-jc.jpg",
+        qtd: 1,
+        novopreco: 0,
+      }
 ]
 
 
 
 const containerCardapio = $('.wrapper');
 const containerCarrinho = $('.container-carrinho')
-
 function carregarCardapio(cardapio) {
-    const result = cardapio.map((c) => {
-        return `
+    let data = []
+    const result = cardapio.forEach((c) => {
+        data.push(`
             <div class="card-produto d-flex">
                 <div class="foto-produto">
                     <img src="./assets/img/${c.img}" alt="">
@@ -72,10 +94,10 @@ function carregarCardapio(cardapio) {
                     </div>
                 </div>
             </div>
-        `
+        `)
 
     })
-    containerCardapio.html(result);
+    containerCardapio.html(data);
 }
 
 
@@ -113,7 +135,6 @@ function salvarStorage(id_item) {
     }
     else {
         const produto = Cardapio.filter((c) => c.id == cid)
-
         contentCart.push({ ...produto })
         localStorage.setItem('produto', JSON.stringify(contentCart))
         carregarStorage(lerStorage());
@@ -242,6 +263,23 @@ $(document).ready(function () {
     $('.adicionar').click(function () {
         salvarStorage($(this).attr('data-cid'));
     })
+
+    $('.opcao').click(function (){
+        $('.opcao').removeClass('selected')
+        $(this).addClass('selected')
+        if ($(this).text() == "Todos") {
+            carregarCardapio(Cardapio)
+        }
+        else
+        {
+            const produtos = Cardapio.filter((cardapio)=> cardapio.categoria == $(this).text())
+
+            carregarCardapio(produtos)
+        }
+            
+
+    })
+
 })
 
 
