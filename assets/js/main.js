@@ -4,7 +4,7 @@ const Cardapio = [
     {
         id: 1,
         nome: 'Café Expresso',
-        categoria: 'Bebida Quentes',
+        categoria: 'Bebidas Quentes',
         preco:14.00,
         descricao: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
         img: 'logo-jc.jpg',
@@ -14,7 +14,7 @@ const Cardapio = [
     {
         id: 2,
         nome: 'Capuccino',
-        categoria: 'Bebida Quentes',
+        categoria: 'Bebidas Quentes',
         preco: 28.90,
         descricao: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
         img: 'logo-jc.jpg',
@@ -24,7 +24,7 @@ const Cardapio = [
     {
         id: 3,
         nome: 'Café Americano',
-        categoria: 'Bebida Quentes',
+        categoria: 'Bebidas Quentes',
         preco: 14.00,
         descricao: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
         img: 'logo-jc.jpg',
@@ -34,7 +34,7 @@ const Cardapio = [
     {
         id: 4,
         nome: 'Café com Leite',
-        categoria: 'Bebida Quentes',
+        categoria: 'Bebidas Quentes',
         preco: 14.00,
         descricao: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
         img: 'logo-jc.jpg',
@@ -65,15 +65,13 @@ const Cardapio = [
       }
 ]
 
-
-
 const containerCardapio = $('.wrapper');
 const containerCarrinho = $('.container-carrinho')
 function carregarCardapio(cardapio) {
     let data = []
     const result = cardapio.forEach((c) => {
         data.push(`
-            <div class="card-produto d-flex">
+            <div data-cid="${c.id}" class="card-produto d-flex">
                 <div class="foto-produto">
                     <img src="./assets/img/${c.img}" alt="">
                 </div>
@@ -255,6 +253,7 @@ function menosUnidade(index) {
     carregarStorage(lerStorage())
 }
 
+
 $(document).ready(function () {
 
     localStorage.clear()
@@ -268,13 +267,27 @@ $(document).ready(function () {
         $('.opcao').removeClass('selected')
         $(this).addClass('selected')
         if ($(this).text() == "Todos") {
-            carregarCardapio(Cardapio)
+            containerCardapio.children().removeClass('d-none')
         }
         else
         {
             const produtos = Cardapio.filter((cardapio)=> cardapio.categoria == $(this).text())
+            containerCardapio.children().addClass('d-none')
+            containerCardapio.children().each(function(){
+               const content = $(this).find('.ps-2 > .nome-produto')
+               produtos.forEach((produto)=>{
+                    if (content.text().trim().toUpperCase() !== produto.nome.trim().toUpperCase()) {
+                        
+                    }
+                    else
+                    {
+                        console.log(`Content: ${content.text().trim().toUpperCase()}`, `Produtos: ${produto.nome.trim().toUpperCase()}`);
+                        $(this).removeClass('d-none')
+                    }
+               })
+            })
 
-            carregarCardapio(produtos)
+
         }
             
 
