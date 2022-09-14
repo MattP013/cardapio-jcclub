@@ -66,7 +66,7 @@ body{
 
 .foto-produto img{
     height: 100%;
-    width: 170px;
+    width: 150px;
     border-radius: 10px;
     object-fit: cover;
 }
@@ -125,6 +125,7 @@ body{
     font-weight: 700;
     font-size: 20px;
     color: #6d6d6d;
+    margin-bottom: 0;
 }
 
 .excluir{
