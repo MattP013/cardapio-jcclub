@@ -94,6 +94,12 @@ body{
 .carrinho img{
     width: 100%;
 }
+
+.descricao-produto{
+    color: #878585f0;
+    font-weight: bold;
+}
+
 .contador{
     position: absolute;
     top: -4px;
@@ -196,6 +202,7 @@ body{
     }
     .card-produto .nome-produto{
         font-size: 16px;
+        margin-bottom: 0;
     }
 
     .operacao{
@@ -211,7 +218,7 @@ body{
     }
     .opcao{
         flex: 0 0 150px;
-        padding: 10px;
+        padding: 20px;
     }
     .wrapper{
         padding: 0;
