@@ -3,10 +3,10 @@
 const Cardapio = [
     {
         id: 1,
-        nome: 'Pão de mel',
+        nome: 'Pão de Mel',
         categoria: 'Snacks',
         preco:7.00,
-        descricao: '13 pct',
+        descricao: 'Disponível',
         img: 'logo-jc.jpg',
         qtd: 1,
     },
@@ -15,7 +15,7 @@ const Cardapio = [
         nome: 'Mochaccino Canela',
         categoria: 'Bebidas',
         preco: 3.00,
-        descricao: 'Nescafé • 23 pct',
+        descricao: 'Disponível',
         img: 'logo-jc.jpg',
         qtd: 1,
         novopreco: 0
@@ -25,7 +25,7 @@ const Cardapio = [
         nome: 'Poosh',
         categoria: 'Snacks',
         preco: 0.30,
-        descricao: '36 pct',
+        descricao: 'Disponível',
         img: 'logo-jc.jpg',
         qtd: 1,
         novopreco: 0
@@ -35,7 +35,7 @@ const Cardapio = [
         nome: `Bib's Mousse de Limão`,
         categoria: 'Snacks',
         preco: 3.00,
-        descricao: '5 pct',
+        descricao: 'Disponível',
         img: 'logo-jc.jpg',
         qtd: 1,
         novopreco: 0
@@ -45,8 +45,7 @@ const Cardapio = [
         nome: "Trento",
         categoria: "Snacks",
         preco: 3.00,
-        descricao:
-          "5 pct.",
+        descricao: "Disponível",
         img: "logo-jc.jpg",
         qtd: 1,
         novopreco: 0,
@@ -56,8 +55,7 @@ const Cardapio = [
         nome: "Café au Lalt",
         categoria: "Bebidas",
         preco: 3.00,
-        descricao:
-          "11 pct.",
+        descricao: "Disponível",
         img: "logo-jc.jpg",
         qtd: 1,
         novopreco: 0,
@@ -67,8 +65,7 @@ const Cardapio = [
         nome: "Trento Nuts",
         categoria: "Snacks",
         preco: 3.00,
-        descricao:
-          "7 pct.",
+        descricao: "Disponível",
         img: "logo-jc.jpg",
         qtd: 1,
         novopreco: 0,
@@ -78,8 +75,7 @@ const Cardapio = [
         nome: "Freegells",
         categoria: "Snacks",
         preco: 2.00,
-        descricao:
-          "8 pct.",
+        descricao: "Disponível",
         img: "logo-jc.jpg",
         qtd: 1,
         novopreco: 0,
@@ -279,10 +275,8 @@ function menosUnidade(index) {
 
 
 $(document).ready(function () {
-
-    localStorage.clear()
     carregarCardapio(Cardapio);
-
+    carregarStorage(lerStorage())
     $('.adicionar').click(function () {
         salvarStorage($(this).attr('data-cid'));
     })
@@ -290,6 +284,7 @@ $(document).ready(function () {
     $('.opcao').click(function (){
         $('.opcao').removeClass('selected')
         $(this).addClass('selected')
+        $('.text-category').text($(this).text())
         if ($(this).text() == "Todos") {
             containerCardapio.children().removeClass('d-none')
         }
@@ -321,8 +316,9 @@ $(document).ready(function () {
         const ProdutosParaEnvio = Produtos.map((P)=>{
             return `${P[0].qtd}x ${P[0].nome} \n`
         })
-        const Mensagem = window.encodeURIComponent("Salve!! Segue a lista de produtos:\n " + ProdutosParaEnvio)
-        window.open("https://api.whatsapp.com/send?phone=5513991764271&text=" + Mensagem, "__blank")
+        let preco = $('.precoTotal').text()
+        const Mensagem = window.encodeURIComponent("Salve!! Acabei de fazer um pedido pelo site, segue abaixo:\n" + ProdutosParaEnvio  + "\n" + "Total: R$ " + preco + "\nEstou no aguardo!")
+        window.open("https://api.whatsapp.com/send?phone=5513996154443&text=" + Mensagem, "__blank")
     })
 
 })
