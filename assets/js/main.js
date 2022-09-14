@@ -3,62 +3,83 @@
 const Cardapio = [
     {
         id: 1,
-        nome: 'Café Expresso',
-        categoria: 'Bebidas Quentes',
-        preco:14.00,
-        descricao: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
+        nome: 'Pão de mel',
+        categoria: 'Snacks',
+        preco:7.00,
+        descricao: '13 pct',
         img: 'logo-jc.jpg',
         qtd: 1,
-        novopreco: 0
     },
     {
         id: 2,
-        nome: 'Capuccino',
-        categoria: 'Bebidas Quentes',
-        preco: 28.90,
-        descricao: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
+        nome: 'Mochaccino Canela',
+        categoria: 'Bebidas',
+        preco: 3.00,
+        descricao: 'Nescafé • 23 pct',
         img: 'logo-jc.jpg',
         qtd: 1,
         novopreco: 0
     },
     {
         id: 3,
-        nome: 'Café Americano',
-        categoria: 'Bebidas Quentes',
-        preco: 14.00,
-        descricao: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
+        nome: 'Poosh',
+        categoria: 'Snacks',
+        preco: 0.30,
+        descricao: '36 pct',
         img: 'logo-jc.jpg',
         qtd: 1,
         novopreco: 0
     },
     {
         id: 4,
-        nome: 'Café com Leite',
-        categoria: 'Bebidas Quentes',
-        preco: 14.00,
-        descricao: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.',
+        nome: `Bib's Mousse de Limão`,
+        categoria: 'Snacks',
+        preco: 3.00,
+        descricao: '5 pct',
         img: 'logo-jc.jpg',
         qtd: 1,
         novopreco: 0
     },
     {
         id: 5,
-        nome: "Pão de mel c/ brigadeiro",
-        categoria: "Lanches",
-        preco: 14.0,
+        nome: "Trento",
+        categoria: "Snacks",
+        preco: 3.00,
         descricao:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
+          "5 pct.",
+        img: "logo-jc.jpg",
+        qtd: 1,
+        novopreco: 0,
+      },
+    {
+        id: 5,
+        nome: "Café au Lalt",
+        categoria: "Bebidas",
+        preco: 3.00,
+        descricao:
+          "11 pct.",
+        img: "logo-jc.jpg",
+        qtd: 1,
+        novopreco: 0,
+      },
+    {
+        id: 5,
+        nome: "Trento Nuts",
+        categoria: "Snacks",
+        preco: 3.00,
+        descricao:
+          "7 pct.",
         img: "logo-jc.jpg",
         qtd: 1,
         novopreco: 0,
       },
       {
         id: 6,
-        nome: "Pão de mel c/ paçoca",
-        categoria: "Lanches",
-        preco: 14.0,
+        nome: "Freegells",
+        categoria: "Snacks",
+        preco: 2.00,
         descricao:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
+          "8 pct.",
         img: "logo-jc.jpg",
         qtd: 1,
         novopreco: 0,
@@ -87,7 +108,7 @@ function carregarCardapio(cardapio) {
                     <div class="acao d-flex justify-content-between align-items-end">
                         <span class="preco">R$ ${Intl.NumberFormat('pt-br', { minimumFractionDigits: 2 }).format(c.preco)}</span>
                         <button data-cid="${c.id}" class="adicionar">
-                            +
+                            <i class="fas fa-plus"></i>
                         </button>
                     </div>
                 </div>
@@ -163,12 +184,12 @@ function carregarStorage(Cproduto) {
                 </div>
                 <div class="ms-2 w-100">
                     <h6 class="nome-produto">
-                        ${c[0].nome} <span class="excluir" onclick="excluirProduto(${index})">X</span>
+                        ${c[0].nome} <span class="excluir" onclick="excluirProduto(${index})"><i class="fas fa-times"></i></span>
                     </h6>
                     <p class="descricao-produto">
                         ${c[0].descricao}
                     </p>
-                    <div data-cid="${c[0].id}" class="operacao mt-2 d-flex justify-content-md-start gap-md-3 gap-0 justify-content-between">
+                    <div data-cid="${c[0].id}" class="operacao mt-2 d-flex justify-content-between">
                             ${botaoDiminuir(c[0].qtd, index)}
                             <span class="preco align-self-center">
                                 x${c[0].qtd} - R$ ${carregarPreco(c[0].preco, c[0].qtd, index)}
@@ -185,6 +206,7 @@ function carregarStorage(Cproduto) {
     {
         ContadorProdutos(contarprodutos)
         containerCarrinho.html(retorno)
+        $('.enviar-whatsapp').attr('disabled',false)
         
     }
     else
@@ -225,6 +247,8 @@ function resetCar()
 {
     $('.contador').addClass('d-none')
     $('.container-total').addClass('d-none')
+    $('.enviar-whatsapp').attr('disabled',true)
+
     containerCarrinho.html(` <p class="text-center" style="font-size: 20px;">Nenhum produto selecionado</p>`)
 }
 
@@ -289,8 +313,16 @@ $(document).ready(function () {
 
 
         }
-            
+    })
 
+    $('.enviar-whatsapp').click(function(){
+        let Produtos = lerStorage()
+
+        const ProdutosParaEnvio = Produtos.map((P)=>{
+            return `${P[0].qtd}x ${P[0].nome} \n`
+        })
+        const Mensagem = window.encodeURIComponent("Salve!! Segue a lista de produtos:\n " + ProdutosParaEnvio)
+        window.open("https://api.whatsapp.com/send?phone=5513991764271&text=" + Mensagem, "__blank")
     })
 
 })
