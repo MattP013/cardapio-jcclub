@@ -132,10 +132,30 @@ $(document).ready(function () {
 
 
   $('#search-input').on('input', function (){
+    const tablerow = $('tbody').find('tr')
+    const search = $(this).val().toUpperCase()
+    
+    if($(this).val())
+    {
+
+      for (let produto of tablerow) {
+            const produtoAtual = $(produto).children('td');
+            
+            if(produtoAtual[0].textContent.toUpperCase().indexOf(search) > -1)
+            {
+
+            }
+            else
+            {
+              $(produto).css("display", "none")
+            }
+      }
+    }
+    else
+    {
+      tablerow.css('display', 'table-row')
+    }
       
-      console.log($(this).val());
-      const tablerow = $('tbody').find('tr')
-      console.log(tablerow);
   })
 
   var option = $('option')
@@ -173,8 +193,6 @@ $(document).ready(function () {
     $(this).next().css("display", "block");
     $(this).css("border-radius", "5px 5px 0 0");
   });
-
- 
 
   $(input[1]).on("input", function () {
     var text = $(this).val().toUpperCase();
