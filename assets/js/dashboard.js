@@ -3,7 +3,7 @@ $(document).ready(function () {
     {
       id: 1,
       nome: "Café Expresso",
-      categoria: "Bebida Quentes",
+      categoria: "Bebidas",
       preco: 14.0,
       descricao:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
@@ -14,7 +14,7 @@ $(document).ready(function () {
     {
       id: 2,
       nome: "Capuccino",
-      categoria: "Bebida Quentes",
+      categoria: "Bebidas",
       preco: 28.9,
       descricao:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
@@ -25,7 +25,7 @@ $(document).ready(function () {
     {
       id: 3,
       nome: "Café Americano",
-      categoria: "Bebida Quentes",
+      categoria: "Bebidas",
       preco: 14.0,
       descricao:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
@@ -36,7 +36,7 @@ $(document).ready(function () {
     {
       id: 4,
       nome: "Café com Leite",
-      categoria: "Bebida Quentes",
+      categoria: "Bebidas",
       preco: 14.0,
       descricao:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
@@ -46,8 +46,8 @@ $(document).ready(function () {
     },
     {
       id: 4,
-      nome: "Pão de mel c/ brigadeiro",
-      categoria: "Bebida Quentes",
+      nome: "Pão de mel de brigadeiro",
+      categoria: "Snacks",
       preco: 14.0,
       descricao:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
@@ -57,8 +57,8 @@ $(document).ready(function () {
     },
     {
       id: 4,
-      nome: "Pão de mel c/ ",
-      categoria: "Bebida Quentes",
+      nome: "Pão de mel",
+      categoria: "Snacks",
       preco: 14.0,
       descricao:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
@@ -68,37 +68,36 @@ $(document).ready(function () {
     },
   ];
 
+  var option = $("option");
+  var input = [$("#categoria_editar"), $("#categoria_adicionar")];
+  var categorias = [$("#categorias_editar"), $("#categorias_adicionar")];
+  var edit = $(".fa-edit");
   function ProductById(Id) {
     const Produto = Produtos.find((element) => {
       return element.id == Id;
     });
 
     const src = window.location.origin;
-    let inputs = $('.updateProduct').find('input')
-    let textarea = $('.updateProduct').find('textarea')
+    let inputs = $(".updateProduct").find("input");
+    let textarea = $(".updateProduct").find("textarea");
 
     $(inputs[1]).val(Produto.nome);
     $(inputs[2]).val(Produto.preco);
     $(inputs[3]).val(Produto.categoria);
     $(textarea).val(Produto.descricao);
-   
+
     $("#product-img").attr("src", `${src}/assets/img/${Produto.img}`);
   }
-   
 
-
-
-  $("input[type='file']").on('change', function (){
-    if(this.files && this.files[0])
-    {
+  $("input[type='file']").on("change", function () {
+    if (this.files && this.files[0]) {
       let file = new FileReader();
-      file.onload = function (e){
-        $(".product-image").find('img').attr("src", e.target.result);
-      }
-      file.readAsDataURL(this.files[0])
+      file.onload = function (e) {
+        $(".product-image").find("img").attr("src", e.target.result);
+      };
+      file.readAsDataURL(this.files[0]);
     }
-  })
-
+  });
 
   const Table = $(".produtos").children("tbody");
 
@@ -113,64 +112,82 @@ $(document).ready(function () {
               minimumFractionDigits: 2,
             }).format(element.preco)}</td>
             <td>${element.qtd}</td>
-            <td class="d-md-block d-none">
+            <td class="d-flex justify-content-lg-center justify-content-around">
               <i
                 class="fas fa-edit mx-lg-2"
+                data-id="${element.id}"
                 data-bs-toggle="modal"
                 data-bs-target="#UpdadeProduct"
               ></i>
-              <i class="fas fa-times-circle"></i>
+              <i class="fas fa-times-circle d-md-block d-none"></i>
             </td>
-            <td class="d-md-none d-flex">...</td>
           </tr>`);
     });
-
     Table.html(TableData);
   }
 
   LoadTable(Produtos, Table);
 
+  $("#search-input").on("input", function () {
+    const tablerow = $("tbody").find("tr");
+    const search = $(this).val().toUpperCase();
 
-  $('#search-input').on('input', function (){
-    const tablerow = $('tbody').find('tr')
-    const search = $(this).val().toUpperCase()
-    
-    if($(this).val())
-    {
-
+    if ($(this).val()) {
       for (let produto of tablerow) {
-            const produtoAtual = $(produto).children('td');
-            
-            if(produtoAtual[0].textContent.toUpperCase().indexOf(search) > -1)
-            {
+        const produtoAtual = $(produto).children("td");
 
-            }
-            else
-            {
-              $(produto).css("display", "none")
-            }
+        if (produtoAtual[0].textContent.toUpperCase().indexOf(search) > -1) {
+        } else {
+          $(produto).css("display", "none");
+        }
       }
+    } else {
+      tablerow.css("display", "table-row");
     }
-    else
-    {
-      tablerow.css('display', 'table-row')
-    }
-      
-  })
+  });
 
-  var option = $('option')
-  var input = [$('#categoria_editar'), $('#categoria_adicionar')]
-  var categorias = [$('#categorias_editar'),$('#categorias_adicionar')]
+  $(".btn-filter").click(function () {
+    $(".filter").fadeToggle();
+  });
 
   $(".fa-edit").click(function (e) {
     const produto = $(this).parents("tr").find("th").text();
+    console.log($(this).data("id"));
     ProductById(produto);
   });
+
+  $(".maior-preco").click(function () {
+    const MaiorPreco = Table.find("tr")
+
+    // let Atual, Proximo = 0
+    // for (let i = 1; i < (MaiorPreco.length - 1); i++) {
+    //   Atual = $(MaiorPreco[i]);
+    //   Proximo = $(MaiorPreco[i + 1])
+    //   if($(Atual).find("td")[1].textContent > $(Proximo).find("td")[1].textContent)
+    //   {
+    //     $(MaiorPreco[i]).parents().before(Proximo,Atual)
+    //   }
+    // }
+    MaiorPreco.sort(function (Anterior, Atual) {
+      
+      console.log(Anterior);
+      console.log(Atual);
+      // if (Anterior[5].html() < Atual[5].html()) {
+      //   return 1;
+      // } else if (Anterior[5].html() > Atual[5].html()) {
+      //   return -1;
+      // }
+      // return 0;
+    });
+
+    // LoadTable(MaiorPreco, Table);
+  });
+
+
 
   $(".fa-times-circle").click(function (e) {
     $(this).parents("tr").remove();
   });
-
 
   $(input[0]).on("focus", function () {
     $(this).next().css("display", "block");
@@ -179,7 +196,7 @@ $(document).ready(function () {
 
   $(input[0]).on("input", function () {
     var text = $(this).val().toUpperCase();
-    
+
     for (let element of option) {
       if ($(element).val().toUpperCase().indexOf(text) > -1) {
         $(element).css("display", "block");
@@ -196,7 +213,7 @@ $(document).ready(function () {
 
   $(input[1]).on("input", function () {
     var text = $(this).val().toUpperCase();
-    
+
     for (let element of option) {
       if ($(element).val().toUpperCase().indexOf(text) > -1) {
         $(element).css("display", "block");
@@ -207,17 +224,14 @@ $(document).ready(function () {
   });
 
   $(option).click(function () {
-    
-    if ($(this).parents('datalist').attr('id') == categorias[0].attr('id')) {
-        input[0].val($(this).val())
-        categorias[0].css("display","none")
-        input[0].css("border-radius", "5px")
-    }
-    else
-    {
-      input[1].val($(this).val())
-      categorias[1].css("display","none")
-      input[1].css("border-radius", "5px")
+    if ($(this).parents("datalist").attr("id") == categorias[0].attr("id")) {
+      input[0].val($(this).val());
+      categorias[0].css("display", "none");
+      input[0].css("border-radius", "5px");
+    } else {
+      input[1].val($(this).val());
+      categorias[1].css("display", "none");
+      input[1].css("border-radius", "5px");
     }
   });
 });
