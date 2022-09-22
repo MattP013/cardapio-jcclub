@@ -99,10 +99,11 @@ $(document).ready(function () {
     }
   });
 
-  const Table = $(".produtos").children("tbody");
+  const Table = $(".produtos")
 
   function LoadTable(Produtos, Table) {
     let TableData = [];
+    Tbody = $(Table).children("tbody")
     const retorno = Produtos.forEach((element) => {
       TableData.push(`
             <tr>
@@ -123,7 +124,7 @@ $(document).ready(function () {
             </td>
           </tr>`);
     });
-    Table.html(TableData);
+    Tbody.html(TableData);
   }
 
   LoadTable(Produtos, Table);
@@ -156,34 +157,28 @@ $(document).ready(function () {
     ProductById(produto);
   });
 
-  $(".maior-preco").click(function () {
-    const MaiorPreco = Table.find("tr")
+  $(".menor-preco").click(function (){SortbyPrice(true)});
+  $(".maior-preco").click(function(){ SortbyPrice (false)});
 
-    // let Atual, Proximo = 0
-    // for (let i = 1; i < (MaiorPreco.length - 1); i++) {
-    //   Atual = $(MaiorPreco[i]);
-    //   Proximo = $(MaiorPreco[i + 1])
-    //   if($(Atual).find("td")[1].textContent > $(Proximo).find("td")[1].textContent)
-    //   {
-    //     $(MaiorPreco[i]).parents().before(Proximo,Atual)
-    //   }
-    // }
-    MaiorPreco.sort(function (Anterior, Atual) {
+  function SortbyPrice(asc)
+  {
+    const modifier = asc ? 1 : -1 
+    const rows = $(Table).children("tbody").find("tr")
+    const tbody = $(Table).children("tbody")
+    const sortedRows = rows.sort((a, b) =>{
+      const aColText = $(a).find("td")[1].textContent
+      const bColText = $(b).find("td")[1].textContent
       
-      console.log(Anterior);
-      console.log(Atual);
-      // if (Anterior[5].html() < Atual[5].html()) {
-      //   return 1;
-      // } else if (Anterior[5].html() > Atual[5].html()) {
-      //   return -1;
-      // }
-      // return 0;
+      return aColText > bColText ? (1 * modifier) : (-1 * modifier)
     });
 
-    // LoadTable(MaiorPreco, Table);
-  });
+    while(tbody.firstChild)
+    {
+      tbody.removeChild(tbody.firstChild)
+    }
 
-
+    $(tbody).append(...sortedRows)
+  }
 
   $(".fa-times-circle").click(function (e) {
     $(this).parents("tr").remove();
