@@ -3,7 +3,7 @@ $(document).ready(function () {
     {
       id: 1,
       nome: "Café Expresso",
-      categoria: "Bebida Quentes",
+      categoria: "Bebidas",
       preco: 14.0,
       descricao:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
@@ -14,7 +14,7 @@ $(document).ready(function () {
     {
       id: 2,
       nome: "Capuccino",
-      categoria: "Bebida Quentes",
+      categoria: "Bebidas",
       preco: 28.9,
       descricao:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
@@ -25,7 +25,7 @@ $(document).ready(function () {
     {
       id: 3,
       nome: "Café Americano",
-      categoria: "Bebida Quentes",
+      categoria: "Bebidas",
       preco: 14.0,
       descricao:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
@@ -36,7 +36,7 @@ $(document).ready(function () {
     {
       id: 4,
       nome: "Café com Leite",
-      categoria: "Bebida Quentes",
+      categoria: "Bebidas",
       preco: 14.0,
       descricao:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
@@ -46,8 +46,8 @@ $(document).ready(function () {
     },
     {
       id: 4,
-      nome: "Pão de mel c/ brigadeiro",
-      categoria: "Bebida Quentes",
+      nome: "Pão de mel de brigadeiro",
+      categoria: "Snacks",
       preco: 14.0,
       descricao:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
@@ -57,8 +57,8 @@ $(document).ready(function () {
     },
     {
       id: 4,
-      nome: "Pão de mel c/ ",
-      categoria: "Bebida Quentes",
+      nome: "Pão de mel",
+      categoria: "Snacks",
       preco: 14.0,
       descricao:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo eligendi.",
@@ -68,42 +68,42 @@ $(document).ready(function () {
     },
   ];
 
+  var option = $("option");
+  var input = [$("#categoria_editar"), $("#categoria_adicionar")];
+  var categorias = [$("#categorias_editar"), $("#categorias_adicionar")];
+  var edit = $(".fa-edit");
   function ProductById(Id) {
     const Produto = Produtos.find((element) => {
       return element.id == Id;
     });
 
     const src = window.location.origin;
-    let inputs = $('.updateProduct').find('input')
-    let textarea = $('.updateProduct').find('textarea')
+    let inputs = $(".updateProduct").find("input");
+    let textarea = $(".updateProduct").find("textarea");
 
     $(inputs[1]).val(Produto.nome);
     $(inputs[2]).val(Produto.preco);
     $(inputs[3]).val(Produto.categoria);
     $(textarea).val(Produto.descricao);
-   
+
     $("#product-img").attr("src", `${src}/assets/img/${Produto.img}`);
   }
-   
 
-
-
-  $("input[type='file']").on('change', function (){
-    if(this.files && this.files[0])
-    {
+  $("input[type='file']").on("change", function () {
+    if (this.files && this.files[0]) {
       let file = new FileReader();
-      file.onload = function (e){
-        $(".product-image").find('img').attr("src", e.target.result);
-      }
-      file.readAsDataURL(this.files[0])
+      file.onload = function (e) {
+        $(".product-image").find("img").attr("src", e.target.result);
+      };
+      file.readAsDataURL(this.files[0]);
     }
-  })
+  });
 
-
-  const Table = $(".produtos").children("tbody");
+  const Table = $(".produtos")
 
   function LoadTable(Produtos, Table) {
     let TableData = [];
+    Tbody = $(Table).children("tbody")
     const retorno = Produtos.forEach((element) => {
       TableData.push(`
             <tr>
@@ -113,44 +113,76 @@ $(document).ready(function () {
               minimumFractionDigits: 2,
             }).format(element.preco)}</td>
             <td>${element.qtd}</td>
-            <td class="d-md-block d-none">
+            <td class="d-flex justify-content-lg-center justify-content-around">
               <i
                 class="fas fa-edit mx-lg-2"
+                data-id="${element.id}"
                 data-bs-toggle="modal"
                 data-bs-target="#UpdadeProduct"
               ></i>
-              <i class="fas fa-times-circle"></i>
+              <i class="fas fa-times-circle d-md-block d-none"></i>
             </td>
-            <td class="d-md-none d-flex">...</td>
           </tr>`);
     });
-
-    Table.html(TableData);
+    Tbody.html(TableData);
   }
 
   LoadTable(Produtos, Table);
 
+  $("#search-input").on("input", function () {
+    const tablerow = $("tbody").find("tr");
+    const search = $(this).val().toUpperCase();
 
-  $('#search-input').on('input', function (){
-      
-      console.log($(this).val());
-      const tablerow = $('tbody').find('tr')
-      console.log(tablerow);
-  })
+    if ($(this).val()) {
+      for (let produto of tablerow) {
+        const produtoAtual = $(produto).children("td");
 
-  var option = $('option')
-  var input = [$('#categoria_editar'), $('#categoria_adicionar')]
-  var categorias = [$('#categorias_editar'),$('#categorias_adicionar')]
+        if (produtoAtual[0].textContent.toUpperCase().indexOf(search) > -1) {
+        } else {
+          $(produto).css("display", "none");
+        }
+      }
+    } else {
+      tablerow.css("display", "table-row");
+    }
+  });
+
+  $(".btn-filter").click(function () {
+    $(".filter").fadeToggle();
+  });
 
   $(".fa-edit").click(function (e) {
     const produto = $(this).parents("tr").find("th").text();
+    console.log($(this).data("id"));
     ProductById(produto);
   });
+
+  $(".menor-preco").click(function (){SortbyPrice(true)});
+  $(".maior-preco").click(function(){ SortbyPrice (false)});
+
+  function SortbyPrice(asc)
+  {
+    const modifier = asc ? 1 : -1 
+    const rows = $(Table).children("tbody").find("tr")
+    const tbody = $(Table).children("tbody")
+    const sortedRows = rows.sort((a, b) =>{
+      const aColText = $(a).find("td")[1].textContent
+      const bColText = $(b).find("td")[1].textContent
+      
+      return aColText > bColText ? (1 * modifier) : (-1 * modifier)
+    });
+
+    while(tbody.firstChild)
+    {
+      tbody.removeChild(tbody.firstChild)
+    }
+
+    $(tbody).append(...sortedRows)
+  }
 
   $(".fa-times-circle").click(function (e) {
     $(this).parents("tr").remove();
   });
-
 
   $(input[0]).on("focus", function () {
     $(this).next().css("display", "block");
@@ -159,7 +191,7 @@ $(document).ready(function () {
 
   $(input[0]).on("input", function () {
     var text = $(this).val().toUpperCase();
-    
+
     for (let element of option) {
       if ($(element).val().toUpperCase().indexOf(text) > -1) {
         $(element).css("display", "block");
@@ -174,11 +206,9 @@ $(document).ready(function () {
     $(this).css("border-radius", "5px 5px 0 0");
   });
 
- 
-
   $(input[1]).on("input", function () {
     var text = $(this).val().toUpperCase();
-    
+
     for (let element of option) {
       if ($(element).val().toUpperCase().indexOf(text) > -1) {
         $(element).css("display", "block");
@@ -189,17 +219,14 @@ $(document).ready(function () {
   });
 
   $(option).click(function () {
-    
-    if ($(this).parents('datalist').attr('id') == categorias[0].attr('id')) {
-        input[0].val($(this).val())
-        categorias[0].css("display","none")
-        input[0].css("border-radius", "5px")
-    }
-    else
-    {
-      input[1].val($(this).val())
-      categorias[1].css("display","none")
-      input[1].css("border-radius", "5px")
+    if ($(this).parents("datalist").attr("id") == categorias[0].attr("id")) {
+      input[0].val($(this).val());
+      categorias[0].css("display", "none");
+      input[0].css("border-radius", "5px");
+    } else {
+      input[1].val($(this).val());
+      categorias[1].css("display", "none");
+      input[1].css("border-radius", "5px");
     }
   });
 });
