@@ -10,7 +10,15 @@
     <title>JC COFFE</title>
 </head>
 <body>
+<?php
 
+use class\Produto;
+
+ require __DIR__ .'\class\Produto.php';
+ $Produto = new Produto();
+ $produtos = $Produto::getProdutos();
+ echo "<pre>"; print_r($produtos); echo "<pre>"; exit; 
+?>
     <header class="container-fluid p-0">
         <section class="apresentacao d-flex" style="background-color: black;">
             <div class="jc-logo align-self-end">
@@ -35,7 +43,27 @@
             </button>
         </div>
         <div class="d-flex flex-wrap justify-content-center gap-lg-4 gap-3 wrapper col-12">
-            ²
+            <div data-cid="${c.id}" class="card-produto d-flex">
+                <div class="foto-produto">
+                    <img src="./assets/img/${c.img}" alt="">
+                </div>
+                <div class="ps-2 w-100">
+                    <h6 class="nome-produto">
+                       ${c.nome}
+                    </h6>
+
+                    <p class="descricao-produto">
+                        ${c.descricao}
+                    </p>
+
+                    <div class="acao d-flex justify-content-between align-items-end">
+                        <span class="preco">R$ ${Intl.NumberFormat('pt-br', { minimumFractionDigits: 2 }).format(c.preco)}</span>
+                        <button data-cid="${c.id}" class="adicionar">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
         
     </main>
@@ -67,4 +95,4 @@
 <script src="./assets/js/jquery.js"></script>
 <script src="./assets/js/bootstrap.js"></script>
 <script src="./assets/js/main.js"></script>
-</html>
+</html> 

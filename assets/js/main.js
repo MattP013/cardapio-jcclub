@@ -275,7 +275,7 @@ function menosUnidade(index) {
 
 
 $(document).ready(function () {
-    carregarCardapio(Cardapio);
+    // carregarCardapio(Cardapio);
     carregarStorage(lerStorage())
     $('.adicionar').click(function () {
         salvarStorage($(this).attr('data-cid'));
