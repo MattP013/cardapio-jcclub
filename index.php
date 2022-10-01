@@ -11,10 +11,9 @@
 </head>
 <body>
 <?php
+require __DIR__ .'/vendor/autoload.php';
+use Class\Produto;
 
-use class\Produto;
-
- require __DIR__ .'\class\Produto.php';
  $Produto = new Produto();
  $produtos = $Produto::getProdutos();
  echo "<pre>"; print_r($produtos); echo "<pre>"; exit; 

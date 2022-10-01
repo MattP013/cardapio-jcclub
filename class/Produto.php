@@ -1,8 +1,7 @@
 <?php
-
-namespace class;
-require __DIR__ .'\Database.php';
-use PDO;
+namespace Class;
+use Class\Database;
+use \PDO;
 class Produto{
 
     public $nmproduto;
@@ -38,8 +37,9 @@ class Produto{
     public static function getProdutos($where = null, $order = null, $limit = null)
     {
         return (new Database('tb_produto'))->select($where,$order,$limit)
-                                           ->fetchAll(PDO::FETCH_CLASS, self::class); 
-    }           
+                                           ->fetchAll(PDO::FETCH_CLASS, self::class);
+
+    }               
 
   
 

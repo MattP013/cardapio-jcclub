@@ -1,0 +1,15 @@
+{
+    "name": "mateus/jccoffe",
+    "autoload": {
+        "psr-4": {
+            "Class\\": "class/"
+        }
+    },
+    "authors": [
+        {
+            "name": "MattP013",
+            "email": "mmateus20pereira@gmail.com"
+        }
+    ],
+    "require": {}
+}
