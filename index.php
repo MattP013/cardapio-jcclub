@@ -11,13 +11,68 @@
 </head>
 <body>
 <?php
-require __DIR__ .'/vendor/autoload.php';
-use Class\Produto;
-
+ require __DIR__ .'/vendor/autoload.php';
+ use Class\Produto;
+ use Class\Categoria;
+ $Categoria = new Categoria();
+ $categorias = $Categoria::getCategoria();
+ $resultCategoria = "";
+ foreach($categorias as $categoria)
+ {
+    $resultCategoria.= '
+        <button class="btn btn-lg opcao">
+        '.
+            $categoria->nm_categoria
+        .'</button>
+    ';
+ }
  $Produto = new Produto();
- $produtos = $Produto::getProdutos();
- echo "<pre>"; print_r($produtos); echo "<pre>"; exit; 
+ $produtos = $Produto::getProdutos("ic_ativo = 1");
+
+ $result = "";
+ foreach($produtos as $produto)
+ {
+    $disponivel = '';
+
+    if($produto->ic_ativo == 1)
+    {
+        $disponivel = 'Disponível';
+    }
+    else
+    {
+        $disponivel = 'Indisponível';
+    }
+    $result .='
+        <div class="col-lg-6">
+                <div data-id="'.$produto->cd_produto.'" class="card-produto">
+                        <div class="foto-produto">
+                            <img src="./assets/img/'.$produto->img_produto.'" alt="">
+                        </div>
+                        <div class="ps-2 w-100">
+                            <h6 class="nome-produto">'.
+                                $produto->nm_produto
+                            .'</h6>
+
+                            <p class="descricao-produto">'.
+                                $disponivel
+                            .'</p>
+                        
+                        <div class="acao d-flex justify-content-between align-items-end">
+                            <span class="preco">
+                                R$ '. number_format($produto->vl_produto, 2, ',', '.').
+                             '</span>
+
+                            <button class="adicionar">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            ';
+ }
 ?>
+
     <header class="container-fluid p-0">
         <section class="apresentacao d-flex" style="background-color: black;">
             <div class="jc-logo align-self-end">
@@ -25,9 +80,8 @@ use Class\Produto;
             </div>
         </section>
         <nav class="d-flex container-filter justify-content-lg-center gap-md-3 gap-1 mt-lg-4 mt-5">
-            <button class=" btn btn-lg opcao selected">Todos</button>
-            <button class=" btn btn-lg opcao">Snacks</button>
-            <button class=" btn btn-lg opcao">Bebidas</button>
+            <button class="btn btn-lg opcao selected">Todos</button>
+            <?=$resultCategoria?>
         </nav>
     </header>
     <main class="mt-3 container cardapio">
@@ -41,28 +95,8 @@ use Class\Produto;
                     <span class="d-none contador">0</span>
             </button>
         </div>
-        <div class="d-flex flex-wrap justify-content-center gap-lg-4 gap-3 wrapper col-12">
-            <div data-cid="${c.id}" class="card-produto d-flex">
-                <div class="foto-produto">
-                    <img src="./assets/img/${c.img}" alt="">
-                </div>
-                <div class="ps-2 w-100">
-                    <h6 class="nome-produto">
-                       ${c.nome}
-                    </h6>
-
-                    <p class="descricao-produto">
-                        ${c.descricao}
-                    </p>
-
-                    <div class="acao d-flex justify-content-between align-items-end">
-                        <span class="preco">R$ ${Intl.NumberFormat('pt-br', { minimumFractionDigits: 2 }).format(c.preco)}</span>
-                        <button data-cid="${c.id}" class="adicionar">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <div class="row wrapper">
+            <?=$result?>
         </div>
         
     </main>

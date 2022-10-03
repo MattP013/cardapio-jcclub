@@ -84,78 +84,61 @@ const Cardapio = [
 
 const containerCardapio = $('.wrapper');
 const containerCarrinho = $('.container-carrinho')
-function carregarCardapio(cardapio) {
-    let data = []
-    const result = cardapio.forEach((c) => {
-        data.push(`
-            <div data-cid="${c.id}" class="card-produto d-flex">
-                <div class="foto-produto">
-                    <img src="./assets/img/${c.img}" alt="">
-                </div>
-                <div class="ps-2 w-100">
-                    <h6 class="nome-produto">
-                       ${c.nome}
-                    </h6>
-
-                    <p class="descricao-produto">
-                        ${c.descricao}
-                    </p>
-
-                    <div class="acao d-flex justify-content-between align-items-end">
-                        <span class="preco">R$ ${Intl.NumberFormat('pt-br', { minimumFractionDigits: 2 }).format(c.preco)}</span>
-                        <button data-cid="${c.id}" class="adicionar">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `)
-
-    })
-    containerCardapio.html(data);
-}
-
-
 
 function lerStorage() {
-    return localStorage.produto ? JSON.parse(localStorage.produto) : [];
+    return localStorage.carrinho ? JSON.parse(localStorage.carrinho) : [];
 }
 
-function salvarStorage(id_item) {
-    const cid = id_item;
-    const contentCart = lerStorage();
+function insertCar(element) {
+    const contentProduct = $(element).prop("innerText").split("\n");
+    const ProductImage = $(element).children('.foto-produto').find('img').attr('src');
+    const newProduct = {
+        id: $(element).attr("data-id"),
+        nome: contentProduct[0],
+        descricao: contentProduct[2],
+        preco: contentProduct[4].replace("R$","").replace(',','.').trim(),
+        quantidade: 1,
+        img: ProductImage,
+        precofinal: 0
+    }
 
-    if (localStorage.produto) {
-        let index;
-        const produto = contentCart.filter((produtoCart, i) => {
-            if (produtoCart[0].id == cid) {
+    let contentCart = lerStorage();
+    if (contentCart.length == 0) {
+        contentCart.push(newProduct)
+        localStorage.setItem('carrinho', JSON.stringify(contentCart))
+    }
+    else
+    {
+    
+        var index
+        const isOnCar = contentCart.filter((produto,i) => {
+            if (produto.id == newProduct.id) {
                 index = i;
-                return produtoCart[0]
-
+                return produto
             }
-
         })
-        if (produto[0]) {
-            maisUnidade(index)
+
+        if (isOnCar.length > 0) {
+
+            maisUnidade(contentCart, index)
         }
-        else {
-            const produto = Cardapio.filter((c) => c.id == cid)
-
-            contentCart.push({ ...produto })
-            localStorage.setItem('produto', JSON.stringify(contentCart))
-            carregarStorage(lerStorage());
+        else
+        {
+            console.log('n adicionado');
+            contentCart.push(newProduct)
+            localStorage.setItem('carrinho', JSON.stringify(contentCart))
         }
-
-
     }
-    else {
-        const produto = Cardapio.filter((c) => c.id == cid)
-        contentCart.push({ ...produto })
-        localStorage.setItem('produto', JSON.stringify(contentCart))
-        carregarStorage(lerStorage());
-    }
-
 }
+
+function maisUnidade(productOnCar, index) {
+    updateProductOnCar = productOnCar[index]
+    updateProductOnCar.quantidade++
+    productOnCar[index] = updateProductOnCar;
+    localStorage.setItem('carrinho', JSON.stringify(productOnCar))
+}
+
+
 function ContadorProdutos(quantidade)
 {
     if(quantidade){
@@ -248,17 +231,6 @@ function resetCar()
     containerCarrinho.html(` <p class="text-center" style="font-size: 20px;">Nenhum produto selecionado</p>`)
 }
 
-function maisUnidade(index) {
-
-    let Produto = lerStorage()
-    let NewPreco = Produto[index]
-
-    NewPreco[0].qtd += 1
-    Produto[index] = NewPreco
-
-    localStorage.setItem('produto', JSON.stringify(Produto))
-    carregarStorage(lerStorage())
-}
 
 
 
@@ -275,10 +247,10 @@ function menosUnidade(index) {
 
 
 $(document).ready(function () {
-    // carregarCardapio(Cardapio);
-    carregarStorage(lerStorage())
+    // carregarStorage(lerStorage())
     $('.adicionar').click(function () {
-        salvarStorage($(this).attr('data-cid'));
+        const selected = $(this).parents('.card-produto');
+        insertCar(selected);
     })
 
     $('.opcao').click(function (){

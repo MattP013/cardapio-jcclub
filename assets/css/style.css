@@ -72,6 +72,7 @@ body{
 }
 
 .card-produto{
+    display: flex;
     flex: 1 1 550px;
     padding: 10px;
     border-bottom: solid 1px #D7986C;
@@ -115,6 +116,10 @@ body{
     padding: 13px;
 
 }
+
+.container-carrinho .card-produto{
+    flex: 0;
+}
 #linha-vertical {
     height: 87%;
     border-left: 1px solid var(--color-base);
@@ -122,6 +127,7 @@ body{
 }
 
 .card-produto .nome-produto{
+    display: flex;
     font-weight: 700;
     font-size: 20px;
     color: #6d6d6d;

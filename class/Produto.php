@@ -28,7 +28,7 @@ class Produto{
             'vl_produto'       => $this->vlproduto,
             'ic_ativo'         => $this->icativo,
             'cd_categoria'     => $this->cdcategoria,
-            'img_produto'     => $this->imgproduto
+            'img_produto'      => $this->imgproduto
         ]);
 
         return true;
