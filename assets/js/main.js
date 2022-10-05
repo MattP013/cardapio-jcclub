@@ -1,87 +1,5 @@
 
 
-const Cardapio = [
-    {
-        id: 1,
-        nome: 'Pão de Mel',
-        categoria: 'Snacks',
-        preco:7.00,
-        descricao: 'Disponível',
-        img: 'logo-jc.jpg',
-        qtd: 1,
-    },
-    {
-        id: 2,
-        nome: 'Mochaccino Canela',
-        categoria: 'Bebidas',
-        preco: 3.00,
-        descricao: 'Disponível',
-        img: 'logo-jc.jpg',
-        qtd: 1,
-        novopreco: 0
-    },
-    {
-        id: 3,
-        nome: 'Poosh',
-        categoria: 'Snacks',
-        preco: 0.30,
-        descricao: 'Disponível',
-        img: 'logo-jc.jpg',
-        qtd: 1,
-        novopreco: 0
-    },
-    {
-        id: 4,
-        nome: `Bib's Mousse de Limão`,
-        categoria: 'Snacks',
-        preco: 3.00,
-        descricao: 'Disponível',
-        img: 'logo-jc.jpg',
-        qtd: 1,
-        novopreco: 0
-    },
-    {
-        id: 5,
-        nome: "Trento",
-        categoria: "Snacks",
-        preco: 3.00,
-        descricao: "Disponível",
-        img: "logo-jc.jpg",
-        qtd: 1,
-        novopreco: 0,
-      },
-    {
-        id: 5,
-        nome: "Café au Lalt",
-        categoria: "Bebidas",
-        preco: 3.00,
-        descricao: "Disponível",
-        img: "logo-jc.jpg",
-        qtd: 1,
-        novopreco: 0,
-      },
-    {
-        id: 5,
-        nome: "Trento Nuts",
-        categoria: "Snacks",
-        preco: 3.00,
-        descricao: "Disponível",
-        img: "logo-jc.jpg",
-        qtd: 1,
-        novopreco: 0,
-      },
-      {
-        id: 6,
-        nome: "Freegells",
-        categoria: "Snacks",
-        preco: 2.00,
-        descricao: "Disponível",
-        img: "logo-jc.jpg",
-        qtd: 1,
-        novopreco: 0,
-      }
-]
-
 const containerCardapio = $('.wrapper');
 const containerCarrinho = $('.container-carrinho')
 
@@ -89,7 +7,7 @@ function lerStorage() {
     return localStorage.carrinho ? JSON.parse(localStorage.carrinho) : [];
 }
 
-function insertCar(element) {
+function insertOnCart(element) {
     const contentProduct = $(element).prop("innerText").split("\n");
     const ProductImage = $(element).children('.foto-produto').find('img').attr('src');
     const newProduct = {
@@ -106,6 +24,7 @@ function insertCar(element) {
     if (contentCart.length == 0) {
         contentCart.push(newProduct)
         localStorage.setItem('carrinho', JSON.stringify(contentCart))
+        loadCart()
     }
     else
     {
@@ -124,11 +43,18 @@ function insertCar(element) {
         }
         else
         {
-            console.log('n adicionado');
             contentCart.push(newProduct)
             localStorage.setItem('carrinho', JSON.stringify(contentCart))
+            loadCart()
         }
     }
+}
+
+function loadCart(){
+    const productsOnCart = lerStorage();
+    const cloneCard = $(".to-clone").children().clone();
+    console.log(cloneCard);
+    // containerCarrinho.appendChild()
 }
 
 function maisUnidade(productOnCar, index) {
@@ -157,27 +83,27 @@ function carregarStorage(Cproduto) {
     const retorno = Cproduto.map((c, index) => {
         contarprodutos+=c[0].qtd;
         return `
-                <div class="card-produto d-flex" style="flex: 0">
-                <div class="foto-produto">
-                    <img src="./assets/img/${c[0].img}" alt="">
-                </div>
-                <div class="ms-2 w-100">
-                    <h6 class="nome-produto">
-                        ${c[0].nome} <span class="excluir" onclick="excluirProduto(${index})"><i class="fas fa-times"></i></span>
-                    </h6>
-                    <p class="descricao-produto">
-                        ${c[0].descricao}
-                    </p>
-                    <div data-cid="${c[0].id}" class="operacao mt-2 d-flex justify-content-between">
-                            ${botaoDiminuir(c[0].qtd, index)}
-                            <span class="preco align-self-center">
-                                x${c[0].qtd} - R$ ${carregarPreco(c[0].preco, c[0].qtd, index)}
-                            </span>
-                        <button class="mais" onclick="maisUnidade(${index})" >
-                            +
-                        </button>
+                <div class="card-produto d-flex">
+                    <div class="foto-produto">
+                        <img src="./assets/img/${c[0].img}" alt="">
                     </div>
-                </div>
+                    <div class="ms-2 w-100">
+                        <h6 class="nome-produto">
+                            ${c[0].nome} <span class="excluir"><i class="fas fa-times"></i></span>
+                        </h6>
+                        <p class="descricao-produto">
+                            ${c[0].descricao}
+                        </p>
+                        <div data-cid="${c[0].id}" class="operacao mt-2 d-flex justify-content-between">
+                                ${botaoDiminuir(c[0].qtd, index)}
+                                <span class="preco align-self-center">
+                                    x${c[0].qtd} - R$ ${carregarPreco(c[0].preco, c[0].qtd, index)}
+                                </span>
+                            <button class="mais">
+                                +
+                            </button>
+                        </div>
+                    </div>
                 </div> 
            `
     })
@@ -250,7 +176,7 @@ $(document).ready(function () {
     // carregarStorage(lerStorage())
     $('.adicionar').click(function () {
         const selected = $(this).parents('.card-produto');
-        insertCar(selected);
+        insertOnCart(selected);
     })
 
     $('.opcao').click(function (){

@@ -110,7 +110,31 @@
             </div>
             <div class="modal-body">
                 <div class="container container-carrinho d-flex flex-column">
-                    <p class="text-center" style="font-size: 20px;">Nenhum produto selecionado</p> 
+                    <!-- <p class="text-center" style="font-size: 20px;">Nenhum produto selecionado</p>  -->
+                    <div class="to-clone d-none">
+                        <div class="card-produto">
+                            <div class="foto-produto">
+                                <img src="./assets/img/logo-jc.jpg" alt="">
+                            </div>
+                            <div class="ms-2 w-100">
+                                <h6 class="nome-produto justify-content-between">
+                                    Pão de Mel <span class="excluir"><i class="fas fa-times"></i></span>
+                                </h6>
+                                <p class="descricao-produto">
+                                    Disponível
+                                </p>
+                                <div data-cid="${c[0].id}" class="operacao mt-2 d-flex justify-content-between">
+                                    <button class="menos" disabled="disabled">-</button>
+                                    <span class="preco align-self-center">
+                                        x1 - R$ 7,00
+                                    </span>
+                                    <button class="mais">
+                                        +
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
                 </div>
                 <div class="container container-total d-none ">
                     <h6 class="">Total: R$ <span class="precoTotal">0</span></h6>
