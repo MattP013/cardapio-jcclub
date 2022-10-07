@@ -135,10 +135,10 @@ body{
 }
 
 .excluir{
-    float: right;
     color: var(--color-base);
     cursor: pointer;
-
+    right: 0;
+    font-size: 20px;
 }
 
 .adicionar{
@@ -244,6 +244,9 @@ body{
 @media screen and (max-width:1024px) {
     .container-filter{
         overflow-x: scroll;
+    }
+    .excluir{
+        font-size: 18px;
     }
 }
 

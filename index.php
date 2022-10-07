@@ -116,14 +116,15 @@
                             <div class="foto-produto">
                                 <img src="./assets/img/logo-jc.jpg" alt="">
                             </div>
-                            <div class="ms-2 w-100">
+                            <div class="detalhes ms-2 w-100 position-relative">
+                            <span class="excluir position-absolute"><i class="fas fa-times"></i></span>
                                 <h6 class="nome-produto justify-content-between">
-                                    Pão de Mel <span class="excluir"><i class="fas fa-times"></i></span>
+                                    Pão de Mel   
                                 </h6>
                                 <p class="descricao-produto">
                                     Disponível
                                 </p>
-                                <div data-cid="${c[0].id}" class="operacao mt-2 d-flex justify-content-between">
+                                <div class="operacao mt-2 d-flex justify-content-between">
                                     <button class="menos" disabled="disabled">-</button>
                                     <span class="preco align-self-center">
                                         x1 - R$ 7,00

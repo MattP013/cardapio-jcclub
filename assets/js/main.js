@@ -40,6 +40,7 @@ function insertOnCart(element) {
         if (isOnCar.length > 0) {
 
             maisUnidade(contentCart, index)
+            
         }
         else
         {
@@ -50,11 +51,37 @@ function insertOnCart(element) {
     }
 }
 
+function createCard(product, element){
+    $(element).attr("data-id",product.id);
+    $(element).find("foto-produto > img").attr("src", `${product.img}`)
+    const [span, nome, descricao, operacao] = $(element).children(".detalhes").children()
+    $(nome).text(product.nome);
+    $(descricao).text(product.descricao)
+    $(operacao).attr("data-id",product.id);
+    
+    [btmenos, preco, btmais] = $(operacao).children(); 
+
+    if (product.quantidade != 1) {
+        $(btmenos).attr("disabled",false)
+    }
+
+    $(preco).text(`x${product.quantidade} - ${product.preco}`)
+    $(containerCarrinho).append(element)
+}
+
 function loadCart(){
     const productsOnCart = lerStorage();
-    const cloneCard = $(".to-clone").children().clone();
-    console.log(cloneCard);
-    // containerCarrinho.appendChild()
+    if (productsOnCart.length != 0) {
+        let amount = 0  
+        const clonedCard = $(".to-clone").children().clone();
+        productsOnCart.forEach((productOnCar) => {
+        createCard(productOnCar, clonedCard)
+            amount+=productOnCar.quantidade
+        })
+    
+        productCounter(amount)
+    }
+    
 }
 
 function maisUnidade(productOnCar, index) {
@@ -65,15 +92,15 @@ function maisUnidade(productOnCar, index) {
 }
 
 
-function ContadorProdutos(quantidade)
+function productCounter(totalAmount)
 {
-    if(quantidade){
-        $('.contador').removeClass('d-none').text(quantidade)
+    if (totalAmount == 0) {
+
+        $(".counter").text(0)
+        $(".counter").addClass("d-none")
     }
-    else
-    {
-        $('.contador').addClass('d-none')
-    }
+    $(".contador").removeClass("d-none")
+    $(".contador").text(totalAmount)
 }
 function carregarStorage(Cproduto) {
     let contarprodutos = 0;
@@ -109,7 +136,7 @@ function carregarStorage(Cproduto) {
     })
     if(retorno[0] != undefined)
     {
-        ContadorProdutos(contarprodutos)
+        productCounter(contarprodutos)
         containerCarrinho.html(retorno)
         $('.enviar-whatsapp').attr('disabled',false)
         
@@ -173,7 +200,14 @@ function menosUnidade(index) {
 
 
 $(document).ready(function () {
-    // carregarStorage(lerStorage())
+
+    loadCart()
+    $(".mais").click(function (){
+        const selected = $(this).parents('.card-produto').attr("data-id");
+
+        console.log(selected);
+    })
+
     $('.adicionar').click(function () {
         const selected = $(this).parents('.card-produto');
         insertOnCart(selected);
