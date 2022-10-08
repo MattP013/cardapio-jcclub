@@ -1,5 +1,4 @@
 
-
 const containerCardapio = $('.wrapper');
 const containerCarrinho = $('.container-carrinho')
 
@@ -39,7 +38,7 @@ function insertOnCart(element) {
 
         if (isOnCar.length > 0) {
 
-            maisUnidade(contentCart, index)
+            moreUnits(contentCart, index)
             
         }
         else
@@ -52,17 +51,16 @@ function insertOnCart(element) {
 }
 
 function createCard(product, element){
-    $(element).attr("data-id",product.id);
+    $(element).attr("data-idcart",product.id);
     $(element).find("foto-produto > img").attr("src", `${product.img}`)
     const [span, nome, descricao, operacao] = $(element).children(".detalhes").children()
     $(nome).text(product.nome);
     $(descricao).text(product.descricao)
-    $(operacao).attr("data-id",product.id);
     
-    [btmenos, preco, btmais] = $(operacao).children(); 
-
+    const [btmenos, preco, btmais] = $(operacao).children(); 
     if (product.quantidade != 1) {
-        $(btmenos).attr("disabled",false)
+        $(btmenos).removeAttr("disabled")
+        $(btmenos).css("background", "var(--color-base)")
     }
 
     $(preco).text(`x${product.quantidade} - ${product.preco}`)
@@ -71,6 +69,7 @@ function createCard(product, element){
 
 function loadCart(){
     const productsOnCart = lerStorage();
+    $(containerCarrinho).empty();
     if (productsOnCart.length != 0) {
         let amount = 0  
         const clonedCard = $(".to-clone").children().clone();
@@ -84,11 +83,13 @@ function loadCart(){
     
 }
 
-function maisUnidade(productOnCar, index) {
+function moreUnits(productOnCar, index) {
     updateProductOnCar = productOnCar[index]
     updateProductOnCar.quantidade++
     productOnCar[index] = updateProductOnCar;
     localStorage.setItem('carrinho', JSON.stringify(productOnCar))
+
+    loadCart()
 }
 
 
@@ -184,9 +185,6 @@ function resetCar()
     containerCarrinho.html(` <p class="text-center" style="font-size: 20px;">Nenhum produto selecionado</p>`)
 }
 
-
-
-
 function menosUnidade(index) {
     let Produto = lerStorage()
     let NewPreco = Produto[index]
@@ -198,15 +196,24 @@ function menosUnidade(index) {
     carregarStorage(lerStorage())
 }
 
-
 $(document).ready(function () {
-
+    localStorage.clear()
     loadCart()
-    $(".mais").click(function (){
-        const selected = $(this).parents('.card-produto').attr("data-id");
 
-        console.log(selected);
-    })
+    $(document).on('click', '.mais', function ()  {
+        const id = $(this).parents(".card-produto").attr("data-idcart")
+        const productsOnCar = lerStorage()        
+        var index ;
+        
+        productsOnCar.map((product, i)=>{
+        
+                if(id == product.id){
+                    index = i
+                }
+        }) 
+
+        moreUnits(productsOnCar,index);
+    });
 
     $('.adicionar').click(function () {
         const selected = $(this).parents('.card-produto');
