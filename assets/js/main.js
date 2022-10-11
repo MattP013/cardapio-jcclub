@@ -50,7 +50,8 @@ function insertOnCart(element) {
     }
 }
 
-function createCard(product, element){
+function createCard(product){
+    const element =  $(".to-clone").children().clone();
     $(element).attr("data-idcart",product.id);
     $(element).find("foto-produto > img").attr("src", `${product.img}`)
     const [span, nome, descricao, operacao] = $(element).children(".detalhes").children()
@@ -63,21 +64,22 @@ function createCard(product, element){
         $(btmenos).css("background", "var(--color-base)")
     }
 
-    $(preco).text(`x${product.quantidade} - ${product.preco}`)
+    $(preco).text(`x${product.quantidade} - R$ ${Intl.NumberFormat('pt-br', { minimumFractionDigits: 2 }).format(product.preco * product.quantidade)}`)
     $(containerCarrinho).append(element)
 }
 
 function loadCart(){
     const productsOnCart = lerStorage();
-    $(containerCarrinho).empty();
     if (productsOnCart.length != 0) {
         let amount = 0  
-        const clonedCard = $(".to-clone").children().clone();
+        $(containerCarrinho).empty()
+
+       const allCards = []
         productsOnCart.forEach((productOnCar) => {
-        createCard(productOnCar, clonedCard)
             amount+=productOnCar.quantidade
+            createCard(productOnCar)
         })
-    
+        
         productCounter(amount)
     }
     
@@ -86,6 +88,15 @@ function loadCart(){
 function moreUnits(productOnCar, index) {
     updateProductOnCar = productOnCar[index]
     updateProductOnCar.quantidade++
+    productOnCar[index] = updateProductOnCar;
+    localStorage.setItem('carrinho', JSON.stringify(productOnCar))
+
+    loadCart()
+}
+
+function lessUnits(productOnCar, index) {
+    updateProductOnCar = productOnCar[index]
+    updateProductOnCar.quantidade--
     productOnCar[index] = updateProductOnCar;
     localStorage.setItem('carrinho', JSON.stringify(productOnCar))
 
@@ -205,14 +216,31 @@ $(document).ready(function () {
         const productsOnCar = lerStorage()        
         var index ;
         
-        productsOnCar.map((product, i)=>{
+        const productToUpdate = productsOnCar.filter((product, i)=>{
         
                 if(id == product.id){
-                    index = i
+                   index = i
+                   return product
                 }
         }) 
-
+        
         moreUnits(productsOnCar,index);
+    });
+
+    $(document).on('click', '.menos', function ()  {
+        const id = $(this).parents(".card-produto").attr("data-idcart")
+        const productsOnCar = lerStorage()        
+        var index ;
+        
+        const productToUpdate = productsOnCar.filter((product, i)=>{
+        
+                if(id == product.id){
+                   index = i
+                   return product
+                }
+        }) 
+        
+        lessUnits(productsOnCar,index);
     });
 
     $('.adicionar').click(function () {

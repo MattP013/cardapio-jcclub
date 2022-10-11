@@ -142,7 +142,7 @@
                     <span class="preco align-self-center">
                         x1 - R$ 7,00
                     </span>
-                    <button class="mais">
+                    <button class="mais" >
                         +
                     </button>
                 </div>
