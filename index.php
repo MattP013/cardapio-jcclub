@@ -20,7 +20,7 @@
  foreach($categorias as $categoria)
  {
     $resultCategoria.= '
-        <button class="btn btn-lg opcao">
+        <button data-idcategory="'.$categoria->cd_categoria.'" class="btn btn-lg opcao">
         '.
             $categoria->nm_categoria
         .'</button>
@@ -43,8 +43,7 @@
         $disponivel = 'Indisponível';
     }
     $result .='
-        <div class="col-lg-6">
-                <div data-id="'.$produto->cd_produto.'" class="card-produto">
+                <div data-id="'.$produto->cd_produto.'" data-category="'.$produto->cd_categoria.'" class="card-produto">
                         <div class="foto-produto">
                             <img src="./assets/img/'.$produto->img_produto.'" alt="">
                         </div>
@@ -68,7 +67,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
             ';
  }
 ?>
@@ -80,7 +78,7 @@
             </div>
         </section>
         <nav class="d-flex container-filter justify-content-lg-center gap-md-3 gap-1 mt-lg-4 mt-5">
-            <button class="btn btn-lg opcao selected">Todos</button>
+            <button data-idcategory="0" class="btn btn-lg opcao selected">Todos</button>
             <?=$resultCategoria?>
         </nav>
     </header>
@@ -95,7 +93,7 @@
                     <span class="d-none contador">0</span>
             </button>
         </div>
-        <div class="row wrapper">
+        <div class="d-flex flex-wrap justify-content-center gap-lg-4 gap-3 wrapper">
             <?=$result?>
         </div>
         
@@ -110,13 +108,13 @@
             </div>
             <div class="modal-body">
                 <div class="container container-carrinho d-flex flex-column">
-                    <p class="text-center" style="font-size: 20px;">Nenhum produto selecionado</p>  
+                    <p class="sem-produto" >Nenhum produto selecionado</p>
                 </div>
                 <div class="container container-total d-none ">
                     <h6 class="">Total: R$ <span class="precoTotal">0</span></h6>
                 </div>
             </div>
-            <div class="modal-footer flex-nowrap justify-content-center">
+            <div class="modal-footer flex-nowrap justify-content-lg-evenly justify-content-center">
               <button type="button" disabled="true" class="btn enviar-whatsapp">Fechar pedido</button>
               <button type="button" class="btn continuar-comprando" data-bs-dismiss="modal">Continuar Comprando</button>
             </div>

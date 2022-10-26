@@ -18,6 +18,12 @@ body{
     background:url('../img/fundocoffe.jpg');
 }
 
+.sem-produto{
+    font-size: 20px;
+    text-align: center;
+    margin: 0;
+}
+
 .jc-logo{
     transform: translate(19px, 42px);
 }

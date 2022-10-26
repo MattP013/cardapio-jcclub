@@ -2,7 +2,7 @@
 const containerCardapio = $('.wrapper');
 const containerCarrinho = $('.container-carrinho')
 
-function lerStorage() {
+function readStorage() {
     return localStorage.carrinho ? JSON.parse(localStorage.carrinho) : [];
 }
 
@@ -19,11 +19,12 @@ function insertOnCart(element) {
         precofinal: 0
     }
 
-    let contentCart = lerStorage();
+    let contentCart = readStorage();
     if (contentCart.length == 0) {
         contentCart.push(newProduct)
         localStorage.setItem('carrinho', JSON.stringify(contentCart))
         loadCart()
+        calcTotalPrice()
     }
     else
     {
@@ -39,6 +40,7 @@ function insertOnCart(element) {
         if (isOnCar.length > 0) {
 
             moreUnits(contentCart, index)
+            calcTotalPrice()
             
         }
         else
@@ -46,6 +48,8 @@ function insertOnCart(element) {
             contentCart.push(newProduct)
             localStorage.setItem('carrinho', JSON.stringify(contentCart))
             loadCart()
+            calcTotalPrice()
+
         }
     }
 }
@@ -69,40 +73,70 @@ function createCard(product){
 }
 
 function loadCart(){
-    const productsOnCart = lerStorage();
-    if (productsOnCart.length != 0) {
+    const productsOnCart = readStorage();
+    if (productsOnCart.length != 0 ) {
         let amount = 0  
+        $('.enviar-whatsapp').attr('disabled',false)
         $(containerCarrinho).empty()
-
-       const allCards = []
         productsOnCart.forEach((productOnCar) => {
             amount+=productOnCar.quantidade
             createCard(productOnCar)
         })
         
         productCounter(amount)
+        calcTotalPrice()
+    }
+    else{
+        resetCart()
     }
     
 }
 
-function moreUnits(productOnCar, index) {
-    updateProductOnCar = productOnCar[index]
-    updateProductOnCar.quantidade++
-    productOnCar[index] = updateProductOnCar;
-    localStorage.setItem('carrinho', JSON.stringify(productOnCar))
+function resetCart()
+{
+    $(containerCarrinho).empty()
+    $(".contador").text(0).addClass("d-none")
+    $('.enviar-whatsapp').attr('disabled',true)
+    $(".container-total").addClass("d-none")
+    $(containerCarrinho).append(`<p class="sem-produto">Nenhum produto selecionado</p>`)
+}
+
+function moreUnits(productsOnCart, index) {
+    updateProductOnCart = productsOnCart[index]
+    updateProductOnCart.quantidade++
+    productsOnCart[index] = updateProductOnCart;
+    localStorage.setItem('carrinho', JSON.stringify(productsOnCart))
 
     loadCart()
 }
 
-function lessUnits(productOnCar, index) {
-    updateProductOnCar = productOnCar[index]
-    updateProductOnCar.quantidade--
-    productOnCar[index] = updateProductOnCar;
-    localStorage.setItem('carrinho', JSON.stringify(productOnCar))
+function lessUnits(productsOnCart, index) {
+    updateProductOnCart = productsOnCart[index]
+    updateProductOnCart.quantidade--
+    productsOnCart[index] = updateProductOnCart;
+    localStorage.setItem('carrinho', JSON.stringify(productsOnCart))
 
     loadCart()
 }
 
+function deleteProductOnCart(productsOnCart, index)
+{
+    productsOnCart.splice(index, 1);
+    localStorage.setItem('carrinho', JSON.stringify(productsOnCart))
+    loadCart()
+}
+
+function calcTotalPrice()
+{
+    const productsOnCar = readStorage()
+    let totalPrice = 0
+     productsOnCar.forEach((product) =>{
+        totalPrice+= product.quantidade * product.preco
+    })
+    
+    $(".container-total").removeClass("d-none")
+    $(".precoTotal").text(Intl.NumberFormat('pt-br', { minimumFractionDigits: 2 }).format(totalPrice));
+}
 
 function productCounter(totalAmount)
 {
@@ -114,109 +148,17 @@ function productCounter(totalAmount)
     $(".contador").removeClass("d-none")
     $(".contador").text(totalAmount)
 }
-function carregarStorage(Cproduto) {
-    let contarprodutos = 0;
-    let calcularTotal = 0
-    let botaoDiminuir = (quantidade, index) => { return quantidade > 1 ? `<button class="menos" onclick="menosUnidade(${index})" style="background-color: #D7986C">-</button>` : '<button class="menos" disabled="disabled">-</button>' }
 
-    const retorno = Cproduto.map((c, index) => {
-        contarprodutos+=c[0].qtd;
-        return `
-                <div class="card-produto d-flex">
-                    <div class="foto-produto">
-                        <img src="./assets/img/${c[0].img}" alt="">
-                    </div>
-                    <div class="ms-2 w-100">
-                        <h6 class="nome-produto">
-                            ${c[0].nome} <span class="excluir"><i class="fas fa-times"></i></span>
-                        </h6>
-                        <p class="descricao-produto">
-                            ${c[0].descricao}
-                        </p>
-                        <div data-cid="${c[0].id}" class="operacao mt-2 d-flex justify-content-between">
-                                ${botaoDiminuir(c[0].qtd, index)}
-                                <span class="preco align-self-center">
-                                    x${c[0].qtd} - R$ ${carregarPreco(c[0].preco, c[0].qtd, index)}
-                                </span>
-                            <button class="mais">
-                                +
-                            </button>
-                        </div>
-                    </div>
-                </div> 
-           `
-    })
-    if(retorno[0] != undefined)
-    {
-        productCounter(contarprodutos)
-        containerCarrinho.html(retorno)
-        $('.enviar-whatsapp').attr('disabled',false)
-        
-    }
-    else
-    {
-        resetCar()
-    }       
-       
-}
-
-function excluirProduto(index){
-    const DeleteProduto = lerStorage();
-    DeleteProduto.splice(index,1);
-    localStorage.setItem('produto', JSON.stringify(DeleteProduto))
-    carregarStorage(DeleteProduto)
-}
-
-function carregarPreco(preco, qtd,index) {
-    let Produto = lerStorage()
-    let NewPreco = Produto[index]
-
-    NewPreco[0].novopreco = preco * qtd
-    Produto[index] = NewPreco
-    localStorage.setItem('produto', JSON.stringify(Produto))
-    atualizarPrecoTotal()
-
-    return Intl.NumberFormat('pt-br', { minimumFractionDigits: 2 }).format(preco * qtd)
-}
-
-
-function atualizarPrecoTotal(){
-
-    $('.container-total').removeClass('d-none')
-    const precoAtualizado = lerStorage().reduce((soma, ValorAtual) => { return soma + ValorAtual[0].novopreco}, 0)
-    $('.precoTotal').text( Intl.NumberFormat('pt-br', { minimumFractionDigits: 2 }).format(precoAtualizado))
-}
-
-function resetCar()
-{
-    $('.contador').addClass('d-none')
-    $('.container-total').addClass('d-none')
-    $('.enviar-whatsapp').attr('disabled',true)
-
-    containerCarrinho.html(` <p class="text-center" style="font-size: 20px;">Nenhum produto selecionado</p>`)
-}
-
-function menosUnidade(index) {
-    let Produto = lerStorage()
-    let NewPreco = Produto[index]
-
-    NewPreco[0].qtd -= 1
-    Produto[index] = NewPreco
-
-    localStorage.setItem('produto', JSON.stringify(Produto))
-    carregarStorage(lerStorage())
-}
 
 $(document).ready(function () {
-    localStorage.clear()
     loadCart()
 
     $(document).on('click', '.mais', function ()  {
         const id = $(this).parents(".card-produto").attr("data-idcart")
-        const productsOnCar = lerStorage()        
-        var index ;
+        const productsOnCart= readStorage()        
+        var index;
         
-        const productToUpdate = productsOnCar.filter((product, i)=>{
+        const productToUpdate = productsOnCart.filter((product, i)=>{
         
                 if(id == product.id){
                    index = i
@@ -224,15 +166,28 @@ $(document).ready(function () {
                 }
         }) 
         
-        moreUnits(productsOnCar,index);
+        moreUnits(productsOnCart,index);
     });
+
+    $(document).on('click', '.excluir', function ()  {
+        const id = $(this).parents(".card-produto").attr("data-idcart")
+        const productsOnCart = readStorage()        
+
+        var indexToDelete = 0
+        productsOnCart.filter((product, index)=>{
+            if(id == product.id){
+                indexToDelete = index
+             }
+        })
+        deleteProductOnCart(productsOnCart,indexToDelete)
+    })
 
     $(document).on('click', '.menos', function ()  {
         const id = $(this).parents(".card-produto").attr("data-idcart")
-        const productsOnCar = lerStorage()        
+        const productsOnCart = readStorage()        
         var index ;
         
-        const productToUpdate = productsOnCar.filter((product, i)=>{
+        const productToUpdate = productsOnCart.filter((product, i)=>{
         
                 if(id == product.id){
                    index = i
@@ -240,7 +195,7 @@ $(document).ready(function () {
                 }
         }) 
         
-        lessUnits(productsOnCar,index);
+        lessUnits(productsOnCart,index);
     });
 
     $('.adicionar').click(function () {
@@ -251,41 +206,35 @@ $(document).ready(function () {
     $('.opcao').click(function (){
         $('.opcao').removeClass('selected')
         $(this).addClass('selected')
-        $('.text-category').text($(this).text())
-        if ($(this).text() == "Todos") {
+        $(".text-category").text($(this).text())
+        const idcategory = $(this).attr("data-idcategory");
+
+        if (idcategory == 0) {
             containerCardapio.children().removeClass('d-none')
         }
         else
         {
-            const produtos = Cardapio.filter((cardapio)=> cardapio.categoria == $(this).text())
-            containerCardapio.children().addClass('d-none')
+            containerCardapio.children().removeClass('d-none')
             containerCardapio.children().each(function(){
-               const content = $(this).find('.ps-2 > .nome-produto')
-               produtos.forEach((produto)=>{
-                    if (content.text().trim().toUpperCase() !== produto.nome.trim().toUpperCase()) {
-                        
-                    }
-                    else
-                    {
-                        console.log(`Content: ${content.text().trim().toUpperCase()}`, `Produtos: ${produto.nome.trim().toUpperCase()}`);
-                        $(this).removeClass('d-none')
-                    }
-               })
+               const content = $(this).attr("data-category")
+               console.log(content);
+               if (content != idcategory) {
+                   $(this).addClass("d-none")
+               }
             })
-
 
         }
     })
 
     $('.enviar-whatsapp').click(function(){
-        let Produtos = lerStorage()
+        let productsOnCart = readStorage()
 
-        const ProdutosParaEnvio = Produtos.map((P)=>{
-            return `${P[0].qtd}x ${P[0].nome} \n`
+        const ProductsToSend = productsOnCart.map((P)=>{
+            return `${P.quantidade}x ${P.nome} \n`
         })
-        let preco = $('.precoTotal').text()
-        const Mensagem = window.encodeURIComponent("Salve!! Acabei de fazer um pedido pelo site, segue abaixo:\n" + ProdutosParaEnvio  + "\n" + "Total: R$ " + preco + "\nEstou no aguardo!")
-        window.open("https://api.whatsapp.com/send?phone=5513996154443&text=" + Mensagem, "__blank")
+        let price = $('.precoTotal').text()
+        const message = window.encodeURIComponent("Salve!! Acabei de fazer um pedido pelo site, segue abaixo:\n" + ProductsToSend  + "\n" + "Total: R$ " + price + "\nEstou no aguardo!")
+        window.open("https://api.whatsapp.com/send?phone=5513996154443&text=" + message, "__blank")
     })
 
 })
