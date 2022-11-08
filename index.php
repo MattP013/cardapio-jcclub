@@ -73,7 +73,7 @@
 ?>
 
     <header class="container-fluid p-0">
-        <section class="apresentacao d-flex" style="background-color: black;">
+        <section class="apresentacao d-flex">
             <div class="jc-logo align-self-end">
                 <img src="./assets/img/logo-jc.jpg" class="" alt="">
             </div>

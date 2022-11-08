@@ -15,7 +15,8 @@ body{
 }
 .apresentacao{
     height: 230px;
-    background:url('../img/fundocoffe.jpg');
+    background:url('../img/capa.jpg') center no-repeat;
+    background-size: cover;
 }
 
 .sem-produto{
@@ -42,12 +43,6 @@ body{
     width: 100%;
     padding: 24px;
 }
-
-.apresentacao{
-    height: 230px;
-    background:url('../img/capa.jpg');
-}
-
 
 .continuar-comprando:hover{
     color: white;
