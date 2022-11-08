@@ -11,6 +11,59 @@
 </head>
 
 <body>
+<?php
+ require __DIR__ .'/vendor/autoload.php';
+ use Class\Produto;
+ use Class\Categoria;
+ $Categoria = new Categoria();
+ $categorias = $Categoria::getCategoria();
+ $resultCategoria = "";
+ foreach($categorias as $categoria)
+ {
+    $resultCategoria.= '
+        <button data-idcategory="'.$categoria->cd_categoria.'" class="btn btn-lg opcao">
+        '.
+            $categoria->nm_categoria
+        .'</button>
+    ';
+ }
+ $Produto = new Produto();
+ $produtos = $Produto::getProdutos("ic_ativo = 1");
+
+ 
+ $result = "";
+ foreach($produtos as $produto)
+ {
+    $disponivel = '';
+
+    if($produto->ic_ativo == 1)
+    {
+        $disponivel = 'Disponível';
+    }
+    else
+    {
+        $disponivel = 'Indisponível';
+    }
+    $result .='
+      <tr>
+      <th scope="row">'.$produto->cd_produto.'</th>
+      <td>'.$produto->nm_produto.'</td>
+      <td>'.number_format($produto->vl_produto, 2, ',', '.').'</td>
+      <td>1</td>
+      <td class="d-flex justify-content-lg-center justify-content-around">
+      <i
+        class="fas fa-edit mx-lg-2"
+        data-id="'.$produto->cd_produto.'"
+        data-bs-toggle="modal"
+        data-bs-target="#UpdadeProduct"
+      ></i>
+      <i class="fas fa-times-circle d-md-block d-none"></i>
+    </td>
+    </tr>';
+ }
+?>
+
+
   <nav class="menu-nav">
     <li class="logo">
       <a href="#" class="nav-option">
@@ -124,30 +177,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Café Expresso</td>
-          <td>14.90</td>
-          <td>10</td>
-          <td class="d-md-block d-none">
-            <i class="fas fa-edit mx-lg-2" data-bs-toggle="modal" data-bs-target="#UpdadeProduct"></i>
-            <i class="fas fa-times-circle"></i>
-          </td>
-          <td class="d-md-none d-flex">...</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Café Americano</td>
-          <td>14.90</td>
-          <td>30</td>
-          <td class="d-md-block d-none">
-            <i class="fas fa-edit mx-lg-2" data-bs-toggle="modal" data-bs-target="#UpdadeProduct"></i>
-            <i class="fas fa-times-circle"></i>
-          </td>
-          <td class="d-md-none d-flex text-transform">
-            
-          </td>
-        </tr>
+        <?=$result?>
       </tbody>
     </table>
   </main>

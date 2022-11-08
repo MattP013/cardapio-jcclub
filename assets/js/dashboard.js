@@ -147,7 +147,7 @@ $(document).ready(function () {
     Tbody.html(TableData);
   }
 
-  LoadTable(Produtos, Table);
+  // LoadTable(Produtos, Table);
 
   $("#search-input").on("input", function () {
     const tablerow = $("tbody").find("tr");

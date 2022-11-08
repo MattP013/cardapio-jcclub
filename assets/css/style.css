@@ -43,6 +43,19 @@ body{
     padding: 24px;
 }
 
+.apresentacao{
+    height: 230px;
+    background:url('../img/capa.jpg');
+}
+
+
+.continuar-comprando:hover{
+    color: white;
+}
+
+.enviar-whatsapp:hover{
+    color: white;
+}
 
 .opcao{
     /* height: 86px;

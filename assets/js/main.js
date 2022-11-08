@@ -227,14 +227,14 @@ $(document).ready(function () {
     })
 
     $('.enviar-whatsapp').click(function(){
-        let productsOnCart = readStorage()
-
-        const ProductsToSend = productsOnCart.map((P)=>{
-            return `${P.quantidade}x ${P.nome} \n`
+        let productsOnCart = readStorage();
+        let ProductsToSend = "";
+         productsOnCart.forEach((product)=>{
+            ProductsToSend += `${product.quantidade}x ${product.nome} \n`;
         })
-        let price = $('.precoTotal').text()
-        const message = window.encodeURIComponent("Salve!! Acabei de fazer um pedido pelo site, segue abaixo:\n" + ProductsToSend  + "\n" + "Total: R$ " + price + "\nEstou no aguardo!")
-        window.open("https://api.whatsapp.com/send?phone=5513996154443&text=" + message, "__blank")
+        let Totalprice = $('.precoTotal').text()
+        const message = window.encodeURIComponent("Salve!! Acabei de fazer um pedido pelo site, segue abaixo:\n" + ProductsToSend  + "\n" + "Total: R$ " + Totalprice + "\nEstou no aguardo!")   
+        window.open("https://api.whatsapp.com/send?phone=5513996154443&text=" + message, "__blank");
     })
 
 })

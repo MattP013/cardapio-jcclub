@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./assets/css/bootstrap.css">
     <link rel="stylesheet" href="./assets/css/style.css">
     <link rel="stylesheet" href="./assets/css/fontawesome/css/all.min.css">
+    <link rel="icon" href="./assets/img/logo-jc.jpg">
     <title>JC COFFE</title>
 </head>
 <body>
@@ -115,8 +116,8 @@
                 </div>
             </div>
             <div class="modal-footer flex-nowrap justify-content-lg-evenly justify-content-center">
-              <button type="button" disabled="true" class="btn enviar-whatsapp">Fechar pedido</button>
               <button type="button" class="btn continuar-comprando" data-bs-dismiss="modal">Continuar Comprando</button>
+              <button type="button" disabled="true" class="btn enviar-whatsapp">Fechar pedido</button>
             </div>
           </div>
         </div>
